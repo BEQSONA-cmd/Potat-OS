@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Directories, Files } from "./models.tsx/Models";
 import { ContextMenu, IContextMenu } from "./models.tsx/ContextMenu";
+import { Files } from "./models.tsx/Files";
 
 export default function Desktop() {
     const [contextMenu, setContextMenu] = useState<IContextMenu>({
@@ -26,7 +26,6 @@ export default function Desktop() {
             onClick={() => setContextMenu({ x: 0, y: 0, show: false, actions: [] })}
         >
             <Files />
-            <Directories />
 
             {contextMenu.show && <ContextMenu context={contextMenu} />}
         </div>
