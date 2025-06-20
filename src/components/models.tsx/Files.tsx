@@ -2,28 +2,15 @@
 
 import { useStore } from "@/lib/store";
 import { FaFileAlt, FaFolder } from "react-icons/fa";
-import { useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { ContextMenu } from "./ContextMenu";
-
-export interface IContextMenu {
-    x: number;
-    y: number;
-    show: boolean;
-    actions: string[];
-    fileId?: string;
-}
+import { IContextMenu, useContextMenu } from "../contexts/ContextMenuContext";
 
 export function Files() {
     const { files, updateFilePosition, deleteFile, renameFile } = useStore();
     const [draggedId, setDraggedId] = useState<string | null>(null);
     const offset = useRef({ x: 0, y: 0 });
-    const [contextMenu, setContextMenu] = useState<IContextMenu>({
-        x: 0,
-        y: 0,
-        show: false,
-        actions: [],
-        fileId: undefined,
-    });
+    const { contextMenu, setContextMenu } = useContextMenu();
 
     const actions = ["open", "rename", "delete", "exit"];
 
@@ -51,8 +38,6 @@ export function Files() {
     }
 
     function onContextMenu(e: React.MouseEvent, file: any) {
-        e.preventDefault();
-        e.stopPropagation();
         setContextMenu({
             x: e.clientX,
             y: e.clientY,
@@ -85,7 +70,7 @@ export function Files() {
                     <span className="mt-1 truncate w-full text-center">{file.name}</span>
                 </div>
             ))}
-            {contextMenu.show && (
+            {contextMenu && contextMenu.show && (
                 <ContextMenu context={contextMenu} />
             )}
         </>

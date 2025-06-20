@@ -1,12 +1,5 @@
 import { useStore } from "@/lib/store";
-
-export interface IContextMenu {
-    x: number;
-    y: number;
-    show: boolean;
-    actions: string[];
-    fileId?: string;
-}
+import { IContextMenu } from "../contexts/ContextMenuContext";
 
 export function ContextMenu({ context }: { context: IContextMenu }) {
     const { addFile } = useStore();

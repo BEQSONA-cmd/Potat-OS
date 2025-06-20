@@ -1,16 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { ContextMenu, IContextMenu } from "./models.tsx/ContextMenu";
+import { ContextMenu } from "./models.tsx/ContextMenu";
 import { Files } from "./models.tsx/Files";
+import { useContextMenu } from "./contexts/ContextMenuContext";
 
 export default function Desktop() {
-    const [contextMenu, setContextMenu] = useState<IContextMenu>({
-        x: 0,
-        y: 0,
-        show: false,
-        actions: [],
-    });
+    const { contextMenu, setContextMenu } = useContextMenu();
 
     const actions = ["New File", "New Folder", "Refresh", "Settings", "Exit"];
 
@@ -27,7 +23,7 @@ export default function Desktop() {
         >
             <Files />
 
-            {contextMenu.show && <ContextMenu context={contextMenu} />}
+            {contextMenu && contextMenu.show && <ContextMenu context={contextMenu} />}
         </div>
     );
 }

@@ -1,3 +1,4 @@
+import { ContextMenuProvider } from "@/components/contexts/ContextMenuContext";
 import "./globals.css";
 import { ReactNode } from 'react';
 import { ToastContainer } from "react-toastify";
@@ -15,9 +16,11 @@ export default function App({ children }: AppProps) {
   return (
     <html lang="en">
       <body>
-        <main>
-          {children}
-        </main>
+        <ContextMenuProvider >
+          <main>
+            {children}
+          </main>
+        </ContextMenuProvider>
         <ToastContainer />
       </body>
     </html>
