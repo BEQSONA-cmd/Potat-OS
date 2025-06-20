@@ -13,7 +13,7 @@ type FileItem = {
 
 type Store = {
     files: FileItem[];
-    addFile: (x: number, y: number, type: FileType) => void;
+    addFile: (x: number, y: number, name: string, type: FileType) => void;
     deleteFile: (id: string) => void;
     renameFile: (id: string, newName: string) => void;
     updateFilePosition: (id: string, x: number, y: number) => void;
@@ -22,9 +22,9 @@ type Store = {
 export const useStore = create<Store>((set) => ({
     files: [],
 
-    addFile: (x, y, type) =>
+    addFile: (x, y, name, type) =>
         set((state) => ({
-            files: [...state.files, { id: nanoid(), name: "New File", type: type, x, y }],
+            files: [...state.files, { id: nanoid(), name: name, type: type, x, y }],
         })),
 
     deleteFile: (id) => set((state) => ({ files: state.files.filter((file) => file.id !== id) })),

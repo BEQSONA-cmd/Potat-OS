@@ -13,10 +13,10 @@ export function ContextMenu({ context }: { context: IContextMenu }) {
     const handleAction = (action: string) => {
         switch (action) {
             case "New File":
-                addFile(context.x, context.y, "file");
+                addFile(context.x, context.y, "New File", "file");
                 break;
             case "New Folder":
-                addFile(context.x, context.y, "directory");
+                addFile(context.x, context.y, "New Folder", "directory");
                 break;
             case "Refresh":
                 break;
