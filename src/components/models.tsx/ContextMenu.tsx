@@ -1,8 +1,8 @@
-import { useStore } from "@/lib/store";
 import { IContextMenu } from "../contexts/ContextMenuContext";
+import { useFiles } from "../contexts/FileContext";
 
 export function ContextMenu({ context }: { context: IContextMenu }) {
-    const { addFile } = useStore();
+    const { addFile, deleteFile, setEditFileId } = useFiles();
 
     const handleAction = (action: string) => {
         switch (action) {
@@ -12,6 +12,12 @@ export function ContextMenu({ context }: { context: IContextMenu }) {
             case "New Folder":
                 addFile(context.x, context.y, "New Folder", "directory");
                 break;
+            case "Delete":
+                deleteFile(context.fileId || "");
+                break;
+            case "Rename":
+                setEditFileId(context.fileId || null);
+                break;
             default:
                 console.warn(`Unknown action: ${action}`);
                 break;
@@ -19,7 +25,10 @@ export function ContextMenu({ context }: { context: IContextMenu }) {
     };
 
     return (
-        <ul className="absolute bg-gray-800 z-10 text-white p-2 rounded shadow" style={{ top: context.y, left: context.x }}>
+        <ul
+            className="absolute bg-gray-800 z-10 text-white p-2 rounded shadow"
+            style={{ top: context.y, left: context.x }}
+        >
             {context.actions.map((action, index) => (
                 <li
                     key={index}
