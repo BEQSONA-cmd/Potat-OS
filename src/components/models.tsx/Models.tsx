@@ -16,9 +16,7 @@ export function Files() {
                     className="absolute flex flex-col items-center justify-center w-20 text-white text-xs font-medium cursor-pointer group"
                     style={{ top: file.y, left: file.x }}
                 >
-                    <div className="bg-blue-600 group-hover:bg-blue-500 transition-colors w-full h-16 rounded-xl shadow-lg flex items-center justify-center">
-                        <FaFileAlt size={28} />
-                    </div>
+                        <FaFileAlt size={28} className="text-blue-500 group-hover:text-blue-400 transition-colors" />
                     <span className="mt-1 truncate w-full text-center">{file.name}</span>
                 </div>
             ))}
@@ -39,9 +37,7 @@ export function Directories() {
                     className="absolute flex flex-col items-center justify-center w-20 text-white text-xs font-medium cursor-pointer group"
                     style={{ top: directory.y, left: directory.x }}
                 >
-                    <div className="bg-yellow-500 group-hover:bg-yellow-400 transition-colors w-full h-16 rounded-xl shadow-lg flex items-center justify-center">
-                        <FaFolder size={28} />
-                    </div>
+                        <FaFolder size={28} className="text-yellow-500 group-hover:text-yellow-400 transition-colors" />
                     <span className="mt-1 truncate w-full text-center">{directory.name}</span>
                 </div>
             ))}
