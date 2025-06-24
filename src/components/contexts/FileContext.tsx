@@ -20,7 +20,9 @@ interface FilesContextType {
     editFileId: string | null;
     currentFileId: string | null;
     setFiles: (files: I_File[] | null) => void;
-    addFile: (position: I_Point, name: string, type: FileType) => void;
+    addFile: (file: I_File) => void;
+    findFile: (id: string) => I_File | undefined;
+    getDirFiles: (dir: I_File) => I_File[];
     deleteFile: (id: string) => void;
     renameFile: (id: string, newName: string) => void;
     updateFilePosition: (id: string, position: I_Point) => void;
@@ -38,17 +40,30 @@ export const FilesProvider = ({ children }: { children: ReactNode }) => {
     const [files, setFiles] = useState<I_File[] | null>(null);
     const { windows, openWindow, closeWindow, findWindowId } = useWindows();
 
-    const addFile = (position: I_Point, name: string, type: FileType) => {
-        setFiles((prevFiles) => [
-            ...(prevFiles || []),
-            {
-                id: crypto.randomUUID(),
-                name,
-                type,
-                position,
-                content: type === "directory" ? [] : "",
-            },
-        ]);
+    const addFile = (file: I_File) => {
+        setFiles((prevFiles) => [...(prevFiles || []), file]);
+    };
+
+    const findFile = (id: string): I_File | undefined => {
+        if (!files) return undefined;
+        const file = files.find((f) => f.id === id);
+        if (file) return file;
+
+        for (const f of files) {
+            if (f.type === "directory" && Array.isArray(f.content)) {
+                const found = f.content.find((item) => item.id === id);
+                if (found) return found;
+            }
+        }
+        return undefined;
+    };
+
+    const getDirFiles = (dir: I_File): I_File[] => {
+        if (dir.type !== "directory" || !Array.isArray(dir.content)) return [];
+        return dir.content.map((file) => ({
+            ...file,
+            position: { x: file.position.x, y: file.position.y },
+        }));
     };
 
     const deleteFile = (id: string) => {
@@ -76,9 +91,8 @@ export const FilesProvider = ({ children }: { children: ReactNode }) => {
     };
 
     const openFile = (id: string) => {
-        const fileToOpen = files?.find((f) => f.id === id);
+        const fileToOpen = findFile(id);
         if (!fileToOpen) return;
-
         if (windows && windows.some((w) => w.file.id === id)) return;
         openWindow(fileToOpen, fileToOpen.position);
     };
@@ -91,6 +105,8 @@ export const FilesProvider = ({ children }: { children: ReactNode }) => {
                 currentFileId,
                 setFiles,
                 addFile,
+                getDirFiles,
+                findFile,
                 deleteFile,
                 renameFile,
                 updateFilePosition,

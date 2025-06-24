@@ -1,13 +1,13 @@
 "use client";
 
 import { FaFile, FaFolder } from "react-icons/fa";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useContextMenu } from "../../components/contexts/ContextMenuContext";
 import { I_File, useFiles } from "../../components/contexts/FileContext";
 import { I_Point } from "../../components/contexts/WindowContext";
 import NameInput from "@/components/Files/NameInput";
 
-export default function File({ file }: { file: I_File }) {
+function File({ file }: { file: I_File }) {
     const { editFileId, setCurrentFileId, updateFilePosition, openFile } = useFiles();
     const { openContextMenu } = useContextMenu();
     const offset = useRef<I_Point | null>(null);
@@ -69,4 +69,19 @@ export default function File({ file }: { file: I_File }) {
             )}
         </div>
     );
+}
+
+export default function Files() {
+    const { setEditFileId, currentFileId, files } = useFiles();
+
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === "F2") {
+                setEditFileId(currentFileId);
+            }
+        };
+        window.addEventListener("keydown", handleKeyDown);
+        return () => window.removeEventListener("keydown", handleKeyDown);
+    }, [currentFileId]);
+    return <div>{files && files.map((file) => <File key={file.id} file={file} />)}</div>;
 }

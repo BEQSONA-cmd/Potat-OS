@@ -1,25 +1,38 @@
-import { I_File } from "@/components/contexts/FileContext";
+import { I_File, useFiles } from "@/components/contexts/FileContext";
+import { FaFile, FaFolder } from "react-icons/fa";
+import NameInput from "@/components/Files/NameInput";
 
-export function DirectoryContent({ file }: { file: I_File }) {
+function DirectoryFiles({ files }: { files: I_File[] }) {
+    const { editFileId } = useFiles();
+
     return (
-        <div className="text-white">
-            <h4 className="font-bold mb-2">Contents:</h4>
-            {Array.isArray(file.content) && file.content.length > 0 ? (
-                <ul>
-                    {file.content.map((item) => (
-                        <li key={item.id} className="flex items-center gap-2 py-1">
-                            {item.type === "directory" ? (
-                                <span className="text-yellow-500">📁</span>
-                            ) : (
-                                <span className="text-blue-500">📄</span>
-                            )}
-                            {item.name}
-                        </li>
-                    ))}
-                </ul>
-            ) : (
-                <p>Empty directory</p>
-            )}
+        <div className="absolute left-0 w-full h-full flex flex-wrap gap-4 p-4">
+            {files.map((file) => (
+                <div key={file.id}>
+                    <div className="flex flex-col text-white cursor-pointer">
+                        {file.type === "directory" ? (
+                            <FaFolder
+                                size={64}
+                                className="text-yellow-500 group-hover:text-yellow-400 transition-colors"
+                            />
+                        ) : (
+                            <FaFile size={64} className="text-blue-500 group-hover:text-blue-400 transition-colors" />
+                        )}
+                        {editFileId === file.id ? (
+                            <NameInput file={file} />
+                        ) : (
+                            <span className="mt-1 truncate w-full text-center">{file.name}</span>
+                        )}
+                    </div>
+                </div>
+            ))}
         </div>
     );
+}
+
+export function DirectoryContent({ file }: { file: I_File }) {
+    const { getDirFiles } = useFiles();
+
+    const files = getDirFiles(file);
+    return <div>{files && <DirectoryFiles files={files} />}</div>;
 }

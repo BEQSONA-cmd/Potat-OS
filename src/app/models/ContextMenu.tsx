@@ -5,14 +5,43 @@ import { I_Point } from "../../components/contexts/WindowContext";
 export function ContextMenu({ context }: { context: IContextMenu }) {
     const { addFile, deleteFile, setEditFileId, openFile } = useFiles();
 
+    const addNewFile = (position: I_Point, name: string) => {
+        const newFile = {
+            id: crypto.randomUUID(),
+            name,
+            type: "file" as const,
+            position,
+            content: "",
+        };
+        addFile(newFile);
+    };
+
+    const addNewFolder = (position: I_Point, name: string) => {
+        const newFile = {
+            id: crypto.randomUUID(),
+            name: "testfile",
+            type: "file" as const,
+            position,
+            content: "testfile",
+        };
+        const newFolder = {
+            id: crypto.randomUUID(),
+            name,
+            type: "directory" as const,
+            position,
+            content: [newFile],
+        };
+        addFile(newFolder);
+    };
+
     const handleAction = (action: string) => {
         const position: I_Point = context.position;
         switch (action) {
             case "New File":
-                addFile(position, "New File", "file");
+                addNewFile(position, "New File");
                 break;
             case "New Folder":
-                addFile(position, "New Folder", "directory");
+                addNewFolder(position, "New Folder");
                 break;
             case "Delete":
                 deleteFile(context.fileId || "");

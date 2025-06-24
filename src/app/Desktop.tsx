@@ -4,24 +4,13 @@ import { useEffect } from "react";
 import { useContextMenu } from "../components/contexts/ContextMenuContext";
 import { useFiles } from "../components/contexts/FileContext";
 import { ContextMenu } from "./models/ContextMenu";
-import File from "./models/File";
 import Window from "./models/Window/Window";
 import { useWindows } from "../components/contexts/WindowContext";
+import Files from "./models/File";
 
 export default function Desktop() {
     const { contextMenu, setContextMenu, openContextMenu } = useContextMenu();
     const { windows } = useWindows();
-    const { setEditFileId, currentFileId, files } = useFiles();
-
-    useEffect(() => {
-        const handleKeyDown = (e: KeyboardEvent) => {
-            if (e.key === "F2") {
-                setEditFileId(currentFileId);
-            }
-        };
-        window.addEventListener("keydown", handleKeyDown);
-        return () => window.removeEventListener("keydown", handleKeyDown);
-    }, [currentFileId]);
 
     return (
         <div
@@ -29,7 +18,7 @@ export default function Desktop() {
             onContextMenu={openContextMenu}
             onClick={() => setContextMenu(null)}
         >
-            {files && files.map((file) => <File key={file.id} file={file} />)}
+            <Files />
             {windows && windows.map((window) => <Window key={window.id} fileWindow={window} />)}
             {contextMenu && contextMenu.show && <ContextMenu context={contextMenu} />}
         </div>
