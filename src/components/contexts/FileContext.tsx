@@ -11,8 +11,7 @@ export interface I_File {
     id: string;
     name: string;
     type: FileType;
-    x: number;
-    y: number;
+    position: I_Point;
     content: ContentType;
 }
 
@@ -21,10 +20,10 @@ interface FilesContextType {
     editFileId: string | null;
     currentFileId: string | null;
     setFiles: (files: I_File[] | null) => void;
-    addFile: (x: number, y: number, name: string, type: FileType) => void;
+    addFile: (position: I_Point, name: string, type: FileType) => void;
     deleteFile: (id: string) => void;
     renameFile: (id: string, newName: string) => void;
-    updateFilePosition: (id: string, x: number, y: number) => void;
+    updateFilePosition: (id: string, position: I_Point) => void;
     setEditFileId: (id: string | null) => void;
     setCurrentFileId: (id: string | null) => void;
     openFile: (id: string) => void;
@@ -37,32 +36,36 @@ export const FilesProvider = ({ children }: { children: ReactNode }) => {
     const [editFileId, setEditFileId] = useState<string | null>(null);
     const [currentFileId, setCurrentFileId] = useState<string | null>(null);
     const [files, setFiles] = useState<I_File[] | null>(null);
-    const { windows, openWindow } = useWindows();
+    const { windows, openWindow, closeWindow, findWindowId } = useWindows();
 
-    const addFile = (x: number, y: number, name: string, type: FileType) => {
+    const addFile = (position: I_Point, name: string, type: FileType) => {
         setFiles((prevFiles) => [
             ...(prevFiles || []),
-            { id: crypto.randomUUID(), name, type, content: type === "file" ? "" : [], x, y },
+            {
+                id: crypto.randomUUID(),
+                name,
+                type,
+                position,
+                content: type === "directory" ? [] : "",
+            },
         ]);
     };
 
     const deleteFile = (id: string) => {
         setFiles((prevFiles) => (prevFiles ? prevFiles.filter((file) => file.id !== id) : null));
-        // Also close any open windows for this file
-        // setWindows((prev) => prev.filter((w) => w.file.id !== id));
+        const windowId = findWindowId(id);
+        closeWindow(windowId ? windowId : "");
     };
 
     const renameFile = (id: string, newName: string) => {
         setFiles((prevFiles) =>
             prevFiles ? prevFiles.map((file) => (file.id === id ? { ...file, name: newName } : file)) : null
         );
-        // Update window titles if open
-        // setWindows((prev) => prev.map((w) => (w.file.id === id ? { ...w, file: { ...w.file, name: newName } } : w)));
     };
 
-    const updateFilePosition = (id: string, x: number, y: number) => {
+    const updateFilePosition = (id: string, position: I_Point) => {
         setFiles((prevFiles) =>
-            prevFiles ? prevFiles.map((file) => (file.id === id ? { ...file, x, y } : file)) : null
+            prevFiles ? prevFiles.map((file) => (file.id === id ? { ...file, position } : file)) : null
         );
     };
 
@@ -70,8 +73,6 @@ export const FilesProvider = ({ children }: { children: ReactNode }) => {
         setFiles((prevFiles) =>
             prevFiles ? prevFiles.map((file) => (file.id === id ? { ...file, content } : file)) : null
         );
-        // Update content in open windows
-        // setWindows((prev) => prev.map((w) => (w.file.id === id ? { ...w, file: { ...w.file, content } } : w)));
     };
 
     const openFile = (id: string) => {
@@ -79,11 +80,7 @@ export const FilesProvider = ({ children }: { children: ReactNode }) => {
         if (!fileToOpen) return;
 
         if (windows && windows.some((w) => w.file.id === id)) return;
-        const position: I_Point = {
-            x: fileToOpen.x || 100,
-            y: fileToOpen.y || 100,
-        };
-        openWindow(fileToOpen, position);
+        openWindow(fileToOpen, fileToOpen.position);
     };
 
     return (

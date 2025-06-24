@@ -1,16 +1,18 @@
-import { IContextMenu } from "../contexts/ContextMenuContext";
-import { useFiles } from "../contexts/FileContext";
+import { IContextMenu } from "../../components/contexts/ContextMenuContext";
+import { useFiles } from "../../components/contexts/FileContext";
+import { I_Point } from "../../components/contexts/WindowContext";
 
 export function ContextMenu({ context }: { context: IContextMenu }) {
     const { addFile, deleteFile, setEditFileId, openFile } = useFiles();
 
     const handleAction = (action: string) => {
+        const position: I_Point = context.position;
         switch (action) {
             case "New File":
-                addFile(context.x, context.y, "New File", "file");
+                addFile(position, "New File", "file");
                 break;
             case "New Folder":
-                addFile(context.x, context.y, "New Folder", "directory");
+                addFile(position, "New Folder", "directory");
                 break;
             case "Delete":
                 deleteFile(context.fileId || "");
@@ -29,7 +31,7 @@ export function ContextMenu({ context }: { context: IContextMenu }) {
     return (
         <ul
             className="absolute bg-gray-800 z-10 text-white p-2 rounded shadow"
-            style={{ top: context.y, left: context.x }}
+            style={{ top: context.position.y, left: context.position.x }}
         >
             {context.actions.map((action, index) => (
                 <li

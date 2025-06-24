@@ -1,8 +1,6 @@
 "use client";
-import Desktop from '@/components/Desktop';
+import Desktop from "@/app/Desktop";
 
 export default function Home() {
-  return (
-    <Desktop />
-  );
+    return <Desktop />;
 }

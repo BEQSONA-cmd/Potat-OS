@@ -2,97 +2,12 @@
 
 import { useState, useRef, useEffect } from "react";
 import { FaRegWindowClose } from "react-icons/fa";
-import { I_Point, I_Window, useWindows } from "../contexts/WindowContext";
-import { I_File, useFiles } from "../contexts/FileContext";
+import { I_Point, I_Window, useWindows } from "../../../components/contexts/WindowContext";
+import { DirectoryContent } from "./DirectoryContent";
+import { FileContent } from "./FileContent";
 
 interface WindowProps {
     fileWindow: I_Window;
-}
-
-export function FileContent({ file }: { file: I_File }) {
-    const { updateFileContent } = useFiles();
-    const [content, setContent] = useState(file.content as string);
-    const [isEditing, setIsEditing] = useState(false);
-    const textareaRef = useRef<HTMLTextAreaElement>(null);
-
-    const handleSave = () => {
-        updateFileContent(file.id, content);
-        setIsEditing(false);
-    };
-
-    const handleDoubleClick = () => {
-        setIsEditing(true);
-    };
-
-    useEffect(() => {
-        if (isEditing && textareaRef.current) {
-            textareaRef.current.focus();
-            textareaRef.current.select();
-        }
-    }, [isEditing]);
-
-    const handleClickOutside = (e: MouseEvent) => {
-        if (textareaRef.current && !textareaRef.current.contains(e.target as Node)) {
-            handleSave();
-        }
-    };
-
-    useEffect(() => {
-        if (isEditing) {
-            document.addEventListener("mousedown", handleClickOutside);
-        } else {
-            document.removeEventListener("mousedown", handleClickOutside);
-        }
-
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, [isEditing]);
-
-    return (
-        <div onDoubleClick={handleDoubleClick} className="h-full w-full">
-            {isEditing ? (
-                <textarea
-                    ref={textareaRef}
-                    className="w-full h-full bg-gray-700 text-white p-2 rounded focus:outline-none"
-                    value={content}
-                    onChange={(e) => setContent(e.target.value)}
-                    onKeyDown={(e) => {
-                        if (e.key === "Enter" && !e.shiftKey) {
-                            e.preventDefault();
-                            handleSave();
-                        }
-                    }}
-                />
-            ) : (
-                <pre className="text-white whitespace-pre-wrap h-full w-full overflow-auto p-2">{content}</pre>
-            )}
-        </div>
-    );
-}
-
-export function DirectoryContent({ file }: { file: I_File }) {
-    return (
-        <div className="text-white">
-            <h4 className="font-bold mb-2">Contents:</h4>
-            {Array.isArray(file.content) && file.content.length > 0 ? (
-                <ul>
-                    {file.content.map((item) => (
-                        <li key={item.id} className="flex items-center gap-2 py-1">
-                            {item.type === "directory" ? (
-                                <span className="text-yellow-500">📁</span>
-                            ) : (
-                                <span className="text-blue-500">📄</span>
-                            )}
-                            {item.name}
-                        </li>
-                    ))}
-                </ul>
-            ) : (
-                <p>Empty directory</p>
-            )}
-        </div>
-    );
 }
 
 export default function Window({ fileWindow }: WindowProps) {
