@@ -2,7 +2,7 @@ import { IContextMenu } from "../contexts/ContextMenuContext";
 import { useFiles } from "../contexts/FileContext";
 
 export function ContextMenu({ context }: { context: IContextMenu }) {
-    const { addFile, deleteFile, setEditFileId } = useFiles();
+    const { addFile, deleteFile, setEditFileId, openFile } = useFiles();
 
     const handleAction = (action: string) => {
         switch (action) {
@@ -18,6 +18,8 @@ export function ContextMenu({ context }: { context: IContextMenu }) {
             case "Rename":
                 setEditFileId(context.fileId || null);
                 break;
+            case "Open":
+                openFile(context.fileId || "");
             default:
                 console.warn(`Unknown action: ${action}`);
                 break;

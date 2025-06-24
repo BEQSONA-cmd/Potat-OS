@@ -10,10 +10,14 @@ interface FileProps {
 }
 
 export default function File({ file }: FileProps) {
-    const { renameFile, editFileId, setEditFileId, setCurrentFileId, updateFilePosition } = useFiles();
+    const { renameFile, editFileId, setEditFileId, setCurrentFileId, updateFilePosition, openFile } = useFiles();
     const { setContextMenu } = useContextMenu();
     const actions = ["Open", "Rename", "Delete", "Exit"];
     const offset = useRef({ x: 0, y: 0 });
+
+    function onDoubleClick(e: React.MouseEvent, file: I_File) {
+        openFile(file.id);
+    }
 
     function onMouseDown(e: React.MouseEvent, file: any) {
         if (e.button !== 0) return;
@@ -51,6 +55,7 @@ export default function File({ file }: FileProps) {
             title={file.name}
             className="absolute flex flex-col items-center justify-center w-20 text-white text-sm cursor-pointer font-medium group"
             style={{ top: file.y, left: file.x }}
+            onDoubleClick={(e) => onDoubleClick(e, file)}
             onMouseDown={(e) => onMouseDown(e, file)}
             onClick={() => {
                 setCurrentFileId(file.id);

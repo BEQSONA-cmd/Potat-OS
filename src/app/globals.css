@@ -1,3 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Prevent text selection during drag/resize */
+.resize-container {
+    user-select: none;
+}
+
+/* Window resize handle styling */
+.cursor-se-resize {
+    cursor: se-resize;
+}
+
+.cursor-move {
+    cursor: move;
+}

@@ -3,6 +3,7 @@ import "./globals.css";
 import { ReactNode } from "react";
 import { ToastContainer } from "react-toastify";
 import { FilesProvider } from "@/components/contexts/FileContext";
+import { WindowsProvider } from "@/components/contexts/WindowContext";
 
 export const metadata = {
     title: "Potat-OS",
@@ -17,12 +18,14 @@ export default function App({ children }: AppProps) {
     return (
         <html lang="en">
             <body>
-                <FilesProvider>
-                    <ContextMenuProvider>
-                        <main>{children}</main>
-                    </ContextMenuProvider>
-                    <ToastContainer />
-                </FilesProvider>
+                <WindowsProvider>
+                    <FilesProvider>
+                        <ContextMenuProvider>
+                            <main>{children}</main>
+                        </ContextMenuProvider>
+                        <ToastContainer />
+                    </FilesProvider>
+                </WindowsProvider>
             </body>
         </html>
     );

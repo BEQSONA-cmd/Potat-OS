@@ -5,9 +5,12 @@ import { useContextMenu } from "./contexts/ContextMenuContext";
 import { useFiles } from "./contexts/FileContext";
 import { ContextMenu } from "./models/ContextMenu";
 import File from "./models/Files";
+import Window from "./models/Window";
+import { useWindows } from "./contexts/WindowContext";
 
 export default function Desktop() {
     const { contextMenu, setContextMenu } = useContextMenu();
+    const { windows } = useWindows();
     const { setEditFileId, currentFileId, files } = useFiles();
 
     const actions = ["New File", "New Folder", "Refresh", "Exit"];
@@ -42,6 +45,7 @@ export default function Desktop() {
             onClick={() => setContextMenu({ x: 0, y: 0, show: false, actions: [] })}
         >
             {files && files.map((file) => <File key={file.id} file={file} />)}
+            {windows && windows.map((window) => <Window key={window.id} fileWindow={window} />)}
             {contextMenu && contextMenu.show && <ContextMenu context={contextMenu} />}
         </div>
     );

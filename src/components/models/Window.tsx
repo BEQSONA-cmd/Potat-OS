@@ -1,0 +1,216 @@
+"use client";
+
+import { useState, useRef, useEffect } from "react";
+import { FaRegWindowClose } from "react-icons/fa";
+import { I_Point, I_Window, useWindows } from "../contexts/WindowContext";
+import { I_File, useFiles } from "../contexts/FileContext";
+
+interface WindowProps {
+    fileWindow: I_Window;
+}
+
+export function FileContent({ file }: { file: I_File }) {
+    const { updateFileContent } = useFiles();
+    const [content, setContent] = useState(file.content as string);
+    const [isEditing, setIsEditing] = useState(false);
+    const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+    const handleSave = () => {
+        updateFileContent(file.id, content);
+        setIsEditing(false);
+    };
+
+    const handleDoubleClick = () => {
+        setIsEditing(true);
+    };
+
+    useEffect(() => {
+        if (isEditing && textareaRef.current) {
+            textareaRef.current.focus();
+            textareaRef.current.select();
+        }
+    }, [isEditing]);
+
+    const handleClickOutside = (e: MouseEvent) => {
+        if (textareaRef.current && !textareaRef.current.contains(e.target as Node)) {
+            handleSave();
+        }
+    };
+
+    useEffect(() => {
+        if (isEditing) {
+            document.addEventListener("mousedown", handleClickOutside);
+        } else {
+            document.removeEventListener("mousedown", handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [isEditing]);
+
+    return (
+        <div onDoubleClick={handleDoubleClick} className="h-full w-full">
+            {isEditing ? (
+                <textarea
+                    ref={textareaRef}
+                    className="w-full h-full bg-gray-700 text-white p-2 rounded focus:outline-none"
+                    value={content}
+                    onChange={(e) => setContent(e.target.value)}
+                    onKeyDown={(e) => {
+                        if (e.key === "Enter" && !e.shiftKey) {
+                            e.preventDefault();
+                            handleSave();
+                        }
+                    }}
+                />
+            ) : (
+                <pre className="text-white whitespace-pre-wrap h-full w-full overflow-auto p-2">{content}</pre>
+            )}
+        </div>
+    );
+}
+
+export function DirectoryContent({ file }: { file: I_File }) {
+    return (
+        <div className="text-white">
+            <h4 className="font-bold mb-2">Contents:</h4>
+            {Array.isArray(file.content) && file.content.length > 0 ? (
+                <ul>
+                    {file.content.map((item) => (
+                        <li key={item.id} className="flex items-center gap-2 py-1">
+                            {item.type === "directory" ? (
+                                <span className="text-yellow-500">📁</span>
+                            ) : (
+                                <span className="text-blue-500">📄</span>
+                            )}
+                            {item.name}
+                        </li>
+                    ))}
+                </ul>
+            ) : (
+                <p>Empty directory</p>
+            )}
+        </div>
+    );
+}
+
+export default function Window({ fileWindow }: WindowProps) {
+    const [position, setPosition] = useState(fileWindow.position);
+    const [size, setSize] = useState(fileWindow.size);
+    const windowRef = useRef<HTMLDivElement>(null);
+    const headerRef = useRef<HTMLDivElement>(null);
+    const resizeHandleRef = useRef<HTMLDivElement>(null);
+    const { closeWindow } = useWindows();
+
+    const onClose = () => {
+        closeWindow(fileWindow.id);
+    };
+
+    useEffect(() => {
+        if (!headerRef.current) return;
+
+        const header = headerRef.current;
+        let offsetX = 0;
+        let offsetY = 0;
+
+        const handleMouseDown = (e: MouseEvent) => {
+            if (e.button !== 0) return;
+            offsetX = e.clientX - position.x;
+            offsetY = e.clientY - position.y;
+
+            const handleMouseMove = (e: MouseEvent) => {
+                const newX = e.clientX - offsetX;
+                const newY = e.clientY - offsetY;
+                setPosition({ x: newX, y: newY });
+            };
+
+            const handleMouseUp = () => {
+                window.removeEventListener("mousemove", handleMouseMove);
+                window.removeEventListener("mouseup", handleMouseUp);
+            };
+
+            window.addEventListener("mousemove", handleMouseMove);
+            window.addEventListener("mouseup", handleMouseUp);
+        };
+
+        header.addEventListener("mousedown", handleMouseDown);
+
+        return () => {
+            header.removeEventListener("mousedown", handleMouseDown);
+        };
+    }, [position]);
+
+    useEffect(() => {
+        if (!resizeHandleRef.current) return;
+
+        const resizeHandle = resizeHandleRef.current;
+        let startX = 0;
+        let startY = 0;
+        let startWidth = 0;
+        let startHeight = 0;
+
+        const handleMouseDown = (e: MouseEvent) => {
+            if (e.button !== 0) return;
+            startX = e.clientX;
+            startY = e.clientY;
+            startWidth = size.x;
+            startHeight = size.y;
+
+            const handleMouseMove = (e: MouseEvent) => {
+                const newWidth = Math.max(300, startWidth + (e.clientX - startX));
+                const newHeight = Math.max(200, startHeight + (e.clientY - startY));
+                const newSize: I_Point = { x: newWidth, y: newHeight };
+                setSize(newSize);
+            };
+
+            const handleMouseUp = () => {
+                window.removeEventListener("mousemove", handleMouseMove);
+                window.removeEventListener("mouseup", handleMouseUp);
+            };
+
+            window.addEventListener("mousemove", handleMouseMove);
+            window.addEventListener("mouseup", handleMouseUp);
+        };
+
+        resizeHandle.addEventListener("mousedown", handleMouseDown);
+
+        return () => {
+            resizeHandle.removeEventListener("mousedown", handleMouseDown);
+        };
+    }, [size]);
+
+    return (
+        <div
+            ref={windowRef}
+            className="absolute bg-gray-800 rounded-md shadow-lg flex flex-col border border-gray-700 resize-container"
+            style={{
+                left: `${position.x}px`,
+                top: `${position.y}px`,
+                width: `${size.x}px`,
+                height: `${size.y}px`,
+                minWidth: "300px",
+                minHeight: "200px",
+            }}
+        >
+            <div ref={headerRef} className="flex items-center justify-between bg-gray-700 p-2 rounded-t-md cursor-move">
+                <h3 className="text-white font-medium">{fileWindow.file.name}</h3>
+                <button onClick={onClose} className="text-white hover:text-red-500 focus:outline-none" title="Close">
+                    <FaRegWindowClose size={20} />
+                </button>
+            </div>
+            <div className="flex-1 overflow-auto p-4">
+                {fileWindow.file.type === "directory" ? (
+                    <DirectoryContent file={fileWindow.file} />
+                ) : (
+                    <FileContent file={fileWindow.file} />
+                )}
+            </div>
+            <div className="flex justify-end gap-2 p-2 bg-gray-700 rounded-b-md"></div>
+            <div
+                ref={resizeHandleRef}
+                className="absolute bottom-0 right-0 w-4 h-4 cursor-se-resize bg-gray-600 rounded-tl-md"
+            />
+        </div>
+    );
+}
