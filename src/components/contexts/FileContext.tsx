@@ -48,19 +48,41 @@ export const FilesProvider = ({ children }: { children: ReactNode }) => {
         setFiles((prevFiles) => [...(prevFiles || []), file]);
     };
 
-    const findFile = (id: string): I_File | undefined => {
-        if (!files) return undefined;
-        const file = files.find((f) => f.id === id);
+    function findFile(id: string, searchFiles?: I_File[]): I_File | undefined {
+        const filesToSearch = searchFiles || files;
+        if (!filesToSearch) return undefined;
+
+        const file = filesToSearch.find((f) => f.id === id);
         if (file) return file;
 
-        for (const f of files) {
+        for (const f of filesToSearch) {
             if (f.type === "directory" && Array.isArray(f.content)) {
-                const found = f.content.find((item) => item.id === id);
+                const found = findFile(id, f.content);
                 if (found) return found;
             }
         }
+
         return undefined;
-    };
+    }
+
+    function updateFileInTree(files: I_File[] | null, id: string, updateFn: (file: I_File) => I_File): I_File[] | null {
+        if (!files) return null;
+
+        return files.map((file) => {
+            if (file.id === id) {
+                return updateFn(file);
+            }
+
+            if (file.type === "directory" && Array.isArray(file.content)) {
+                const updatedContent = updateFileInTree(file.content, id, updateFn);
+                if (updatedContent !== file.content && updatedContent !== null) {
+                    return { ...file, content: updatedContent };
+                }
+            }
+
+            return file;
+        });
+    }
 
     const getDirFiles = (dir: I_File): I_File[] => {
         if (dir.type !== "directory" || !Array.isArray(dir.content)) return [];
@@ -91,12 +113,21 @@ export const FilesProvider = ({ children }: { children: ReactNode }) => {
     };
 
     const updateFileContent = (id: string, content: ContentType) => {
-        let fileToUpdate = findFile(id);
-        if (!fileToUpdate) return;
-        toast.success(`File ${fileToUpdate.name} updated successfully!`);
-        fileToUpdate = { ...fileToUpdate, content };
-        setFiles((prevFiles) => (prevFiles ? prevFiles.map((file) => (file.id === id ? fileToUpdate : file)) : null));
-        fileUpdate(fileToUpdate);
+        setFiles((prevFiles) => {
+            if (!prevFiles) return null;
+
+            const updatedFiles = updateFileInTree(prevFiles, id, (file) => {
+                return { ...file, content };
+            });
+            if (!updatedFiles) return null;
+
+            const updatedFile = findFile(id, updatedFiles);
+            if (updatedFile) {
+                fileUpdate(updatedFile);
+            }
+
+            return updatedFiles;
+        });
     };
 
     const openFile = (id: string) => {

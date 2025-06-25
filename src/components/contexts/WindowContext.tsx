@@ -17,7 +17,9 @@ export interface I_Window {
 
 interface WindowsContextType {
     windows: I_Window[] | null;
+    currentFileId?: string | null;
     setWindows: (windows: I_Window[]) => void;
+    setCurrentFileId: (id: string | null) => void;
     openWindow: (file: I_File, position: I_Point) => void;
     updateWindowPosition: (windowId: string, position: I_Point) => void;
     updateWindowSize: (windowId: string, size: I_Point) => void;
@@ -30,6 +32,7 @@ const WindowsContext = createContext<WindowsContextType | undefined>(undefined);
 
 export const WindowsProvider = ({ children }: { children: ReactNode }) => {
     const [windows, setWindows] = useState<I_Window[]>([]);
+    const [currentFileId, setCurrentFileId] = useState<string | null>(null);
 
     const openWindow = (file: I_File, position: I_Point) => {
         const newWindow: I_Window = {
@@ -38,6 +41,7 @@ export const WindowsProvider = ({ children }: { children: ReactNode }) => {
             position,
             size: { x: 500, y: 350 },
         };
+        setCurrentFileId(newWindow.id);
         setWindows((prev) => [...prev, newWindow]);
     };
 
@@ -68,7 +72,9 @@ export const WindowsProvider = ({ children }: { children: ReactNode }) => {
         <WindowsContext.Provider
             value={{
                 windows,
+                currentFileId,
                 setWindows,
+                setCurrentFileId,
                 openWindow,
                 updateWindowPosition,
                 updateWindowSize,

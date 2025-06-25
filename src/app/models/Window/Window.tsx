@@ -16,7 +16,7 @@ export default function Window({ fileWindow }: WindowProps) {
     const windowRef = useRef<HTMLDivElement>(null);
     const headerRef = useRef<HTMLDivElement>(null);
     const resizeHandleRef = useRef<HTMLDivElement>(null);
-    const { closeWindow } = useWindows();
+    const { closeWindow, setCurrentFileId, currentFileId } = useWindows();
 
     const onClose = () => {
         closeWindow(fileWindow.id);
@@ -30,6 +30,10 @@ export default function Window({ fileWindow }: WindowProps) {
         let offsetY = 0;
 
         const handleMouseDown = (e: MouseEvent) => {
+            if (!windowRef.current) return;
+            if (fileWindow.id) {
+                setCurrentFileId(fileWindow.id);
+            }
             if (e.button !== 0) return;
             offsetX = e.clientX - position.x;
             offsetY = e.clientY - position.y;
@@ -66,6 +70,9 @@ export default function Window({ fileWindow }: WindowProps) {
         let startHeight = 0;
 
         const handleMouseDown = (e: MouseEvent) => {
+            if (fileWindow.id) {
+                setCurrentFileId(fileWindow.id);
+            }
             if (e.button !== 0) return;
             startX = e.clientX;
             startY = e.clientY;
@@ -98,6 +105,9 @@ export default function Window({ fileWindow }: WindowProps) {
     return (
         <div
             ref={windowRef}
+            onClick={() => {
+                setCurrentFileId(fileWindow.id);
+            }}
             className="absolute bg-gray-800 rounded-md shadow-lg flex flex-col border border-gray-700 resize-container"
             style={{
                 left: `${position.x}px`,
@@ -106,6 +116,7 @@ export default function Window({ fileWindow }: WindowProps) {
                 height: `${size.y}px`,
                 minWidth: "300px",
                 minHeight: "200px",
+                zIndex: fileWindow.id === currentFileId ? 100 : 11,
             }}
         >
             <div ref={headerRef} className="flex items-center justify-between bg-gray-700 p-2 rounded-t-md cursor-move">

@@ -115,5 +115,21 @@ export default function Files() {
         window.addEventListener("keydown", handleKeyDown);
         return () => window.removeEventListener("keydown", handleKeyDown);
     }, [currentFileId]);
-    return <div>{files && files.map((file) => <File key={file.id} file={file} />)}</div>;
+
+    return (
+        <div>
+            {files &&
+                files.map((file) => (
+                    <div
+                        key={file.id}
+                        className="relative"
+                        style={{
+                            zIndex: file.id === currentFileId ? 10 : 1,
+                        }}
+                    >
+                        <File key={file.id} file={file} />
+                    </div>
+                ))}
+        </div>
+    );
 }

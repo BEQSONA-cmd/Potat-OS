@@ -59,10 +59,10 @@ export function ContextMenu({ context }: { context: IContextMenu }) {
 
     return (
         <ul
-            className="absolute bg-gray-800 z-10 text-white p-2 rounded shadow"
-            style={{ top: context.position.y, left: context.position.x }}
+            className="absolute bg-gray-800 text-white p-2 rounded shadow"
+            style={{ top: context.position.y, left: context.position.x, zIndex: 200 } as React.CSSProperties}
         >
-            {context.actions.map((action, index) => (
+            {context.actions.map((action: string, index: number) => (
                 <li
                     key={index}
                     className="hover:bg-gray-600 px-2 py-1 cursor-pointer"
