@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useState, ReactNode } from "react";
 import { I_Point, I_Window, useWindows } from "./WindowContext";
+import { toast } from "react-toastify";
 
 export type FileType = "file" | "directory";
 
@@ -76,11 +77,10 @@ export const FilesProvider = ({ children }: { children: ReactNode }) => {
     };
 
     const renameFile = (id: string, newName: string) => {
-        setFiles((prevFiles) =>
-            prevFiles ? prevFiles.map((file) => (file.id === id ? { ...file, name: newName } : file)) : null
-        );
-        const fileToUpdate = findFile(id);
+        let fileToUpdate = findFile(id);
         if (!fileToUpdate) return;
+        fileToUpdate = { ...fileToUpdate, name: newName };
+        setFiles((prevFiles) => (prevFiles ? prevFiles.map((file) => (file.id === id ? fileToUpdate : file)) : null));
         fileUpdate(fileToUpdate);
     };
 
@@ -93,6 +93,7 @@ export const FilesProvider = ({ children }: { children: ReactNode }) => {
     const updateFileContent = (id: string, content: ContentType) => {
         let fileToUpdate = findFile(id);
         if (!fileToUpdate) return;
+        toast.success(`File ${fileToUpdate.name} updated successfully!`);
         fileToUpdate = { ...fileToUpdate, content };
         setFiles((prevFiles) => (prevFiles ? prevFiles.map((file) => (file.id === id ? fileToUpdate : file)) : null));
         fileUpdate(fileToUpdate);

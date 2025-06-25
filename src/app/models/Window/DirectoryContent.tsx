@@ -3,26 +3,35 @@ import { FaFile, FaFolder } from "react-icons/fa";
 import NameInput from "@/components/Files/NameInput";
 
 function DirectoryFiles({ files }: { files: I_File[] }) {
-    const { editFileId } = useFiles();
+    const { editFileId, openFile } = useFiles();
+
+    function onDoubleClick(e: React.MouseEvent, file: I_File) {
+        openFile(file.id);
+    }
 
     return (
         <div className="absolute left-0 w-full h-full flex flex-wrap gap-4 p-4">
             {files.map((file) => (
                 <div key={file.id}>
                     <div className="flex flex-col text-white cursor-pointer">
-                        {file.type === "directory" ? (
-                            <FaFolder
-                                size={64}
-                                className="text-yellow-500 group-hover:text-yellow-400 transition-colors"
-                            />
-                        ) : (
-                            <FaFile size={64} className="text-blue-500 group-hover:text-blue-400 transition-colors" />
-                        )}
-                        {editFileId === file.id ? (
-                            <NameInput file={file} />
-                        ) : (
-                            <span className="mt-1 truncate w-full text-center">{file.name}</span>
-                        )}
+                        <div onDoubleClick={(e) => onDoubleClick(e, file)} className="group flex flex-col items-center">
+                            {file.type === "directory" ? (
+                                <FaFolder
+                                    size={64}
+                                    className="text-yellow-500 group-hover:text-yellow-400 transition-colors"
+                                />
+                            ) : (
+                                <FaFile
+                                    size={64}
+                                    className="text-blue-500 group-hover:text-blue-400 transition-colors"
+                                />
+                            )}
+                            {editFileId === file.id ? (
+                                <NameInput file={file} />
+                            ) : (
+                                <span className="mt-1 truncate w-full text-center">{file.name}</span>
+                            )}
+                        </div>
                     </div>
                 </div>
             ))}
