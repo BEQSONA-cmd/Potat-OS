@@ -16,7 +16,7 @@ interface ContextMenuContextType {
     openContextMenu: (e: React.MouseEvent, fileId?: string) => void;
 }
 
-const desktopActions = ["New File", "New Folder", "Refresh", "Exit"];
+const desktopActions = ["New Folder", "Refresh", "New File", "Change Background", "Exit"];
 const fileActions = ["Open", "Rename", "Delete", "Exit"];
 
 const ContextMenuContext = createContext<ContextMenuContextType | undefined>(undefined);

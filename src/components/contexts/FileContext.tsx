@@ -21,6 +21,10 @@ interface FilesContextType {
     editFileId: string | null;
     currentFileId: string | null;
     hoveredDirectoryId?: string;
+    fileCount: number;
+    setFileCount: (count: number) => void;
+    folderCount: number;
+    setFolderCount: (count: number) => void;
     setFiles: (files: I_File[] | null) => void;
     setHoveredDirectoryId: (id: string) => void;
     addFile: (file: I_File) => void;
@@ -41,6 +45,8 @@ export const FilesProvider = ({ children }: { children: ReactNode }) => {
     const [editFileId, setEditFileId] = useState<string | null>(null);
     const [currentFileId, setCurrentFileId] = useState<string | null>(null);
     const [files, setFiles] = useState<I_File[] | null>(null);
+    const [fileCount, setFileCount] = useState(0);
+    const [folderCount, setFolderCount] = useState(0);
     const [hoveredDirectoryId, setHoveredDirectoryId] = useState("");
     const { windows, openWindow, closeWindow, findWindowId, fileUpdate } = useWindows();
 
@@ -142,6 +148,10 @@ export const FilesProvider = ({ children }: { children: ReactNode }) => {
         <FilesContext.Provider
             value={{
                 files,
+                fileCount,
+                setFileCount,
+                folderCount,
+                setFolderCount,
                 hoveredDirectoryId,
                 editFileId,
                 currentFileId,

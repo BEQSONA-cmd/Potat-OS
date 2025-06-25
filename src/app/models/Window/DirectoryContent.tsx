@@ -10,11 +10,14 @@ function DirectoryFiles({ files }: { files: I_File[] }) {
     }
 
     return (
-        <div className="absolute left-0 w-full h-full flex flex-wrap gap-4 p-4">
-            {files.map((file) => (
-                <div key={file.id}>
-                    <div className="flex flex-col text-white cursor-pointer">
-                        <div onDoubleClick={(e) => onDoubleClick(e, file)} className="group flex flex-col items-center">
+        <div className="h-full w-full">
+            <div className="grid grid-cols-auto-fill gap-2">
+                {files.map((file) => (
+                    <div key={file.id} className="flex flex-col items-center justify-center w-full">
+                        <div
+                            onDoubleClick={(e) => onDoubleClick(e, file)}
+                            className="text-white group flex flex-col items-center w-full cursor-pointer p-2 hover:bg-gray-700 rounded transition-colors"
+                        >
                             {file.type === "directory" ? (
                                 <FaFolder
                                     size={64}
@@ -33,8 +36,8 @@ function DirectoryFiles({ files }: { files: I_File[] }) {
                             )}
                         </div>
                     </div>
-                </div>
-            ))}
+                ))}
+            </div>
         </div>
     );
 }

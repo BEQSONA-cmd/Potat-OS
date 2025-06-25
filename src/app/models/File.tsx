@@ -74,7 +74,7 @@ function File({ file }: { file: I_File }) {
         <div
             key={file.id}
             title={file.name}
-            className="absolute flex flex-col items-center justify-center w-20 text-white text-sm cursor-pointer font-medium group"
+            className="absolute flex flex-col items-center justify-center text-white text-sm cursor-pointer font-medium group p-2 hover:bg-gray-600 hover:bg-opacity-50 rounded transition-colors"
             style={{ top: file.position.y, left: file.position.x }}
             onDoubleClick={(e) => onDoubleClick(e, file)}
             onMouseDown={(e) => onMouseDown(e, file)}
@@ -89,10 +89,10 @@ function File({ file }: { file: I_File }) {
                 file.id === hoveredDirectoryId ? (
                     <FaFolder size={64} className="text-orange-500 animate-pulse" />
                 ) : (
-                    <FaFolder size={64} className="text-yellow-500 group-hover:text-yellow-400 transition-colors" />
+                    <FaFolder size={64} className="text-yellow-500 transition-colors" />
                 )
             ) : (
-                <FaFile size={64} className="text-blue-500 group-hover:text-blue-400 transition-colors" />
+                <FaFile size={64} className="text-blue-500 transition-colors" />
             )}
             {editFileId === file.id ? (
                 <NameInput file={file} />
@@ -122,7 +122,7 @@ export default function Files() {
                 files.map((file) => (
                     <div
                         key={file.id}
-                        className="relative"
+                        className="relative "
                         style={{
                             zIndex: file.id === currentFileId ? 10 : 1,
                         }}
