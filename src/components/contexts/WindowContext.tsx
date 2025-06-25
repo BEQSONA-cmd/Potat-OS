@@ -22,6 +22,7 @@ interface WindowsContextType {
     updateWindowPosition: (windowId: string, position: I_Point) => void;
     updateWindowSize: (windowId: string, size: I_Point) => void;
     closeWindow: (id: string) => void;
+    fileUpdate: (file: I_File) => void;
     findWindowId: (fileId: string) => string | undefined;
 }
 
@@ -56,6 +57,12 @@ export const WindowsProvider = ({ children }: { children: ReactNode }) => {
         const window = windows.find((w) => w.file.id === fileId);
         return window ? window.id : undefined;
     };
+    const fileUpdate = (file: I_File) => {
+        const windowToUpdate = findWindowId(file.id);
+        if (windowToUpdate) {
+            setWindows((prev) => prev.map((w) => (w.id === windowToUpdate ? { ...w, file } : w)));
+        }
+    };
 
     return (
         <WindowsContext.Provider
@@ -66,6 +73,7 @@ export const WindowsProvider = ({ children }: { children: ReactNode }) => {
                 updateWindowPosition,
                 updateWindowSize,
                 closeWindow,
+                fileUpdate,
                 findWindowId,
             }}
         >

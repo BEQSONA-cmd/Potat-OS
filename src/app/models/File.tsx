@@ -1,14 +1,27 @@
 "use client";
 
 import { FaFile, FaFolder } from "react-icons/fa";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useContextMenu } from "../../components/contexts/ContextMenuContext";
 import { I_File, useFiles } from "../../components/contexts/FileContext";
 import { I_Point } from "../../components/contexts/WindowContext";
 import NameInput from "@/components/Files/NameInput";
+import { getCloseDirectory } from "@/components/Files/utils";
 
 function File({ file }: { file: I_File }) {
-    const { editFileId, setCurrentFileId, updateFilePosition, openFile } = useFiles();
+    const {
+        setHoveredDirectoryId,
+        updateFileContent,
+        deleteFile,
+        getDirFiles,
+        hoveredDirectoryId,
+        editFileId,
+        setCurrentFileId,
+        updateFilePosition,
+        openFile,
+        findFile,
+        files,
+    } = useFiles();
     const { openContextMenu } = useContextMenu();
     const offset = useRef<I_Point | null>(null);
 
@@ -18,6 +31,7 @@ function File({ file }: { file: I_File }) {
 
     function onMouseDown(e: React.MouseEvent, file: any) {
         if (e.button !== 0) return;
+        let closeDirectoryId = "";
 
         offset.current = {
             x: e.clientX - file.position.x,
@@ -25,17 +39,31 @@ function File({ file }: { file: I_File }) {
         };
 
         function onMouseMove(e: MouseEvent) {
+            const movePos: I_Point = {
+                x: e.clientX - offset.current!.x,
+                y: e.clientY - offset.current!.y,
+            };
             if (offset.current) {
-                updateFilePosition(file.id, {
-                    x: e.clientX - offset.current.x,
-                    y: e.clientY - offset.current.y,
-                });
+                setHoveredDirectoryId("");
+                updateFilePosition(file.id, movePos);
+                closeDirectoryId = getCloseDirectory(movePos, files || []);
+                if (closeDirectoryId && closeDirectoryId !== file.id) {
+                    setHoveredDirectoryId(closeDirectoryId);
+                }
             }
         }
 
         function onMouseUp() {
             window.removeEventListener("mousemove", onMouseMove);
             window.removeEventListener("mouseup", onMouseUp);
+            if (closeDirectoryId && closeDirectoryId !== file.id) {
+                setHoveredDirectoryId("");
+                const directry = findFile(closeDirectoryId) as I_File;
+                const files = getDirFiles(directry);
+                files.push(file);
+                updateFileContent(closeDirectoryId, files);
+                deleteFile(file.id);
+            }
         }
 
         window.addEventListener("mousemove", onMouseMove);
@@ -58,7 +86,11 @@ function File({ file }: { file: I_File }) {
             }}
         >
             {file.type === "directory" ? (
-                <FaFolder size={64} className="text-yellow-500 group-hover:text-yellow-400 transition-colors" />
+                file.id === hoveredDirectoryId ? (
+                    <FaFolder size={64} className="text-orange-500 animate-pulse" />
+                ) : (
+                    <FaFolder size={64} className="text-yellow-500 group-hover:text-yellow-400 transition-colors" />
+                )
             ) : (
                 <FaFile size={64} className="text-blue-500 group-hover:text-blue-400 transition-colors" />
             )}

@@ -1,8 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
 import { useContextMenu } from "../components/contexts/ContextMenuContext";
-import { useFiles } from "../components/contexts/FileContext";
 import { ContextMenu } from "./models/ContextMenu";
 import Window from "./models/Window/Window";
 import { useWindows } from "../components/contexts/WindowContext";

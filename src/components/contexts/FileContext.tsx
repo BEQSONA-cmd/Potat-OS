@@ -19,7 +19,9 @@ interface FilesContextType {
     files: I_File[] | null;
     editFileId: string | null;
     currentFileId: string | null;
+    hoveredDirectoryId?: string;
     setFiles: (files: I_File[] | null) => void;
+    setHoveredDirectoryId: (id: string) => void;
     addFile: (file: I_File) => void;
     findFile: (id: string) => I_File | undefined;
     getDirFiles: (dir: I_File) => I_File[];
@@ -38,7 +40,8 @@ export const FilesProvider = ({ children }: { children: ReactNode }) => {
     const [editFileId, setEditFileId] = useState<string | null>(null);
     const [currentFileId, setCurrentFileId] = useState<string | null>(null);
     const [files, setFiles] = useState<I_File[] | null>(null);
-    const { windows, openWindow, closeWindow, findWindowId } = useWindows();
+    const [hoveredDirectoryId, setHoveredDirectoryId] = useState("");
+    const { windows, openWindow, closeWindow, findWindowId, fileUpdate } = useWindows();
 
     const addFile = (file: I_File) => {
         setFiles((prevFiles) => [...(prevFiles || []), file]);
@@ -76,6 +79,9 @@ export const FilesProvider = ({ children }: { children: ReactNode }) => {
         setFiles((prevFiles) =>
             prevFiles ? prevFiles.map((file) => (file.id === id ? { ...file, name: newName } : file)) : null
         );
+        const fileToUpdate = findFile(id);
+        if (!fileToUpdate) return;
+        fileUpdate(fileToUpdate);
     };
 
     const updateFilePosition = (id: string, position: I_Point) => {
@@ -85,9 +91,11 @@ export const FilesProvider = ({ children }: { children: ReactNode }) => {
     };
 
     const updateFileContent = (id: string, content: ContentType) => {
-        setFiles((prevFiles) =>
-            prevFiles ? prevFiles.map((file) => (file.id === id ? { ...file, content } : file)) : null
-        );
+        let fileToUpdate = findFile(id);
+        if (!fileToUpdate) return;
+        fileToUpdate = { ...fileToUpdate, content };
+        setFiles((prevFiles) => (prevFiles ? prevFiles.map((file) => (file.id === id ? fileToUpdate : file)) : null));
+        fileUpdate(fileToUpdate);
     };
 
     const openFile = (id: string) => {
@@ -101,6 +109,7 @@ export const FilesProvider = ({ children }: { children: ReactNode }) => {
         <FilesContext.Provider
             value={{
                 files,
+                hoveredDirectoryId,
                 editFileId,
                 currentFileId,
                 setFiles,
@@ -112,6 +121,7 @@ export const FilesProvider = ({ children }: { children: ReactNode }) => {
                 updateFilePosition,
                 setEditFileId,
                 setCurrentFileId,
+                setHoveredDirectoryId,
                 openFile,
                 updateFileContent,
             }}
