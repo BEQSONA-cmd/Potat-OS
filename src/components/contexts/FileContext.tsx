@@ -122,7 +122,8 @@ export const FilesProvider = ({ children }: { children: ReactNode }) => {
             if (!updatedFiles) return null;
 
             const updatedFile = findFile(id, updatedFiles);
-            if (updatedFile) {
+
+            if (updatedFile && typeof content !== "string") {
                 fileUpdate(updatedFile);
             }
 
