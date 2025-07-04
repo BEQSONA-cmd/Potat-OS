@@ -1,8 +1,10 @@
 "use client";
 
-import { createContext, useContext, useState, ReactNode } from "react";
-import { I_Point, I_Window, useWindows } from "./WindowContext";
-import { toast } from "react-toastify";
+import { createContext, useContext, useState, ReactNode, useEffect } from "react";
+import { I_Point, useWindows } from "./WindowContext";
+import axios from "axios";
+
+const HOST = process.env.NEXT_PUBLIC_HOST || "http://localhost:8080";
 
 export type FileType = "file" | "directory";
 
@@ -41,10 +43,41 @@ interface FilesContextType {
 
 const FilesContext = createContext<FilesContextType | undefined>(undefined);
 
+interface getRepoParams {
+    repoName: string;
+}
+
+async function getRepo({ repoName }: getRepoParams) {
+    try {
+        const response = await axios.get(`${HOST}/api/get`, {
+            params: {
+                repoName: repoName,
+            },
+        });
+        if (response.data && response.data.data) {
+            return response.data.data as I_File;
+        }
+    } catch (error) {
+        console.error("Error fetching files:", error);
+    }
+}
+
+const repoNames = ["Potat-OS", "Cabinette", "Minishell_Tester", "RayCaster", "Arduino"];
+
+function changeFilePosition(file: I_File, position: I_Point): I_File {
+    return {
+        ...file,
+        position: {
+            x: position.x + (file.position?.x || 0),
+            y: position.y + (file.position?.y || 0),
+        },
+    };
+}
+
 export const FilesProvider = ({ children }: { children: ReactNode }) => {
+    const [files, setFiles] = useState<I_File[] | null>(null);
     const [editFileId, setEditFileId] = useState<string | null>(null);
     const [currentFileId, setCurrentFileId] = useState<string | null>(null);
-    const [files, setFiles] = useState<I_File[] | null>(null);
     const [fileCount, setFileCount] = useState(0);
     const [folderCount, setFolderCount] = useState(0);
     const [hoveredDirectoryId, setHoveredDirectoryId] = useState("");
@@ -53,6 +86,20 @@ export const FilesProvider = ({ children }: { children: ReactNode }) => {
     const addFile = (file: I_File) => {
         setFiles((prevFiles) => [...(prevFiles || []), file]);
     };
+
+    useEffect(() => {
+        (async () => {
+            let prevPosition = { x: 0, y: 0 };
+            for (const name of repoNames) {
+                const file = await getRepo({ repoName: name });
+                if (file) {
+                    const finalFile = changeFilePosition(file, prevPosition);
+                    addFile(finalFile);
+                }
+                prevPosition = { x: prevPosition.x + 100, y: prevPosition.y };
+            }
+        })();
+    }, []);
 
     function findFile(id: string, searchFiles?: I_File[]): I_File | undefined {
         const filesToSearch = searchFiles || files;
