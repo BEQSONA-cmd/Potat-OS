@@ -2,6 +2,8 @@
 
 import { createContext, useContext, useState, ReactNode } from "react";
 import { I_File } from "./FileContext";
+import { useDockApps } from "./DockContext";
+import { FaFile, FaFolder } from "react-icons/fa";
 
 export interface I_Point {
     x: number;
@@ -20,6 +22,7 @@ interface WindowsContextType {
     currentFileId?: string | null;
     setWindows: (windows: I_Window[]) => void;
     setCurrentFileId: (id: string | null) => void;
+    setCurrentWindow: (id: string | null) => void;
     openWindow: (file: I_File, position: I_Point) => void;
     updateWindowPosition: (windowId: string, position: I_Point) => void;
     updateWindowSize: (windowId: string, size: I_Point) => void;
@@ -33,6 +36,16 @@ const WindowsContext = createContext<WindowsContextType | undefined>(undefined);
 export const WindowsProvider = ({ children }: { children: ReactNode }) => {
     const [windows, setWindows] = useState<I_Window[]>([]);
     const [currentFileId, setCurrentFileId] = useState<string | null>(null);
+    const { addDockApp, removeDockApp, setCurrentAppName } = useDockApps();
+
+    const setCurrentWindow = (id: string | null) => {
+        setCurrentFileId(id);
+
+        const appName = windows.find((w) => w.id === id)?.file.name;
+        if (appName) {
+            setCurrentAppName(appName);
+        }
+    };
 
     const openWindow = (file: I_File, position: I_Point) => {
         const newWindow: I_Window = {
@@ -43,6 +56,13 @@ export const WindowsProvider = ({ children }: { children: ReactNode }) => {
         };
         setCurrentFileId(newWindow.id);
         setWindows((prev) => [...prev, newWindow]);
+
+        addDockApp({
+            name: file.name,
+            icon: file.type === "file" ? <FaFile /> : <FaFolder />,
+            onClick: () => setCurrentFileId(newWindow.id),
+        });
+        setCurrentAppName(file.name);
     };
 
     const updateWindowPosition = (windowId: string, position: I_Point) => {
@@ -55,6 +75,12 @@ export const WindowsProvider = ({ children }: { children: ReactNode }) => {
 
     const closeWindow = (id: string) => {
         setWindows((prev) => prev.filter((w) => w.id !== id));
+
+        const appName = windows.find((w) => w.id === id)?.file.name;
+        if (!appName) return;
+
+        removeDockApp(appName);
+        setCurrentAppName(null);
     };
 
     const findWindowId = (fileId: string): string | undefined => {
@@ -75,6 +101,7 @@ export const WindowsProvider = ({ children }: { children: ReactNode }) => {
                 currentFileId,
                 setWindows,
                 setCurrentFileId,
+                setCurrentWindow,
                 openWindow,
                 updateWindowPosition,
                 updateWindowSize,

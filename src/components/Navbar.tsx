@@ -7,7 +7,6 @@ import {
     MdSignalWifi4Bar,
     MdSignalWifi3Bar,
     MdSignalWifi2Bar,
-    MdPowerOff,
     MdLogout,
     MdRestartAlt,
     MdVolumeDown,
@@ -26,11 +25,11 @@ function WifiMenu() {
             </div>
             <div className="hover:bg-gray-700 px-2 py-2 rounded cursor-pointer flex items-center gap-2">
                 <MdSignalWifi3Bar />
-                <span>Boil-Fi</span>
+                <span>42 Student</span>
             </div>
             <div className="hover:bg-gray-700 px-2 py-2 rounded cursor-pointer flex items-center gap-2">
                 <MdSignalWifi2Bar />
-                <span>SpudSpot</span>
+                <span>Home</span>
             </div>
         </div>
     );
@@ -38,18 +37,20 @@ function WifiMenu() {
 
 function VolumeMenu({ volume, onChange }: { volume: number; onChange: (v: number) => void }) {
     return (
-        <div className="absolute right-0 mt-2 bg-gray-800 border border-gray-700 text-sm rounded-md p-3 w-48 z-50 shadow-lg">
-            <div className="flex items-center justify-between mb-2">
+        <div className="absolute right-0 mt-2 bg-gray-800 border border-gray-700 text-sm rounded-lg p-3 w-48 z-50 shadow-xl backdrop-blur-sm">
+            <h3 className="px-2 py-1 text-gray-400 text-xs font-medium tracking-wider">Volume Control</h3>
+            <hr className="border-gray-700 my-1 mb-2" />
+
+            <div className="flex items-center justify-between mb-1">
                 {volume === 0 ? (
-                    <MdVolumeMute className="text-l text-gray-400" />
+                    <MdVolumeMute className="text-xl text-gray-300" />
                 ) : volume < 50 ? (
-                    <MdVolumeDown className="text-l text-gray-400" />
+                    <MdVolumeDown className="text-xl text-gray-300" />
                 ) : (
-                    <MdVolumeUp className="text-l text-gray-400" />
+                    <MdVolumeUp className="text-xl text-gray-300" />
                 )}
-                <span className="text-sm text-gray-400">{volume}%</span>
+                <span className="text-sm font-medium text-gray-300">{volume}%</span>
             </div>
-            <hr className="border-gray-700  mb-2" />
             <input
                 type="range"
                 min="0"
@@ -95,7 +96,12 @@ export default function Navbar() {
     useEffect(() => {
         const update = () => {
             const now = new Date();
-            setTime(now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }));
+            const month = now.toLocaleString("default", { month: "short" });
+            const day = now.getDate();
+            const hours = now.getHours().toString().padStart(2, "0");
+            const minutes = now.getMinutes().toString().padStart(2, "0");
+            const finalTime = `${month} ${day}\u00A0\u00A0${hours}:${minutes}`;
+            setTime(finalTime);
         };
         update();
         const interval = setInterval(update, 60000);
@@ -121,11 +127,11 @@ export default function Navbar() {
     return (
         <div className="absolute top-0 left-0 w-full h-8 bg-black bg-opacity-80 flex items-center justify-between px-4 text-sm z-50 text-white">
             <div className="flex items-center gap-3">
-                <ImTerminal className="text-lg text-orange-400" />
+                <ImTerminal className="text-lg text-orange-500" />
                 <span className="font-semibold">Potat OS</span>
             </div>
 
-            <div>{time}</div>
+            <div className="font-semibold">{time}</div>
 
             <div className="relative flex gap-4 items-center text-lg">
                 <div className="relative" ref={wifiRef}>

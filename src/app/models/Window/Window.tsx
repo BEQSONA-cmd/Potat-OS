@@ -16,7 +16,7 @@ export default function Window({ fileWindow }: WindowProps) {
     const windowRef = useRef<HTMLDivElement>(null);
     const headerRef = useRef<HTMLDivElement>(null);
     const resizeHandleRef = useRef<HTMLDivElement>(null);
-    const { closeWindow, setCurrentFileId, currentFileId } = useWindows();
+    const { closeWindow, setCurrentWindow, currentFileId } = useWindows();
 
     const onClose = () => {
         closeWindow(fileWindow.id);
@@ -32,7 +32,7 @@ export default function Window({ fileWindow }: WindowProps) {
         const handleMouseDown = (e: MouseEvent) => {
             if (!windowRef.current) return;
             if (fileWindow.id) {
-                setCurrentFileId(fileWindow.id);
+                setCurrentWindow(fileWindow.id);
             }
             if (e.button !== 0) return;
             offsetX = e.clientX - position.x;
@@ -71,7 +71,7 @@ export default function Window({ fileWindow }: WindowProps) {
 
         const handleMouseDown = (e: MouseEvent) => {
             if (fileWindow.id) {
-                setCurrentFileId(fileWindow.id);
+                setCurrentWindow(fileWindow.id);
             }
             if (e.button !== 0) return;
             startX = e.clientX;
@@ -106,7 +106,7 @@ export default function Window({ fileWindow }: WindowProps) {
         <div
             ref={windowRef}
             onClick={() => {
-                setCurrentFileId(fileWindow.id);
+                setCurrentWindow(fileWindow.id);
             }}
             className="absolute bg-gray-800 rounded-md shadow-lg flex flex-col border border-gray-700 resize-container"
             style={{

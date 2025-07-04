@@ -4,6 +4,7 @@ import { ReactNode } from "react";
 import { ToastContainer } from "react-toastify";
 import { FilesProvider } from "@/components/contexts/FileContext";
 import { WindowsProvider } from "@/components/contexts/WindowContext";
+import { DockAppsProvider } from "@/components/contexts/DockContext";
 
 export const metadata = {
     title: "Potat-OS",
@@ -18,14 +19,16 @@ export default function App({ children }: AppProps) {
     return (
         <html lang="en">
             <body>
-                <WindowsProvider>
-                    <FilesProvider>
-                        <ContextMenuProvider>
-                            <main>{children}</main>
-                        </ContextMenuProvider>
-                        <ToastContainer />
-                    </FilesProvider>
-                </WindowsProvider>
+                <DockAppsProvider>
+                    <WindowsProvider>
+                        <FilesProvider>
+                            <ContextMenuProvider>
+                                <main>{children}</main>
+                            </ContextMenuProvider>
+                            <ToastContainer />
+                        </FilesProvider>
+                    </WindowsProvider>
+                </DockAppsProvider>
             </body>
         </html>
     );

@@ -64,13 +64,13 @@ export function ContextMenu({ context }: { context: IContextMenu }) {
 
     return (
         <ul
-            className="absolute bg-gray-800 text-white p-2 rounded shadow"
+            className="absolute bg-gray-800 text-sm text-white p-2 rounded shadow"
             style={
                 {
                     top: context.position.y,
                     left: context.position.x,
                     zIndex: 200,
-                    width: "190px",
+                    width: "170px",
                 } as React.CSSProperties
             }
         >
@@ -78,7 +78,7 @@ export function ContextMenu({ context }: { context: IContextMenu }) {
                 <div key={index} className="border-b border-gray-700 last:border-0">
                     <li
                         key={index}
-                        className="hover:bg-gray-600 px-3 py-2 cursor-pointer rounded transition-colors"
+                        className="hover:bg-gray-600 px-2 py-2 cursor-pointer rounded transition-colors"
                         onClick={() => handleAction(action)}
                     >
                         {action}

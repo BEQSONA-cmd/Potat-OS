@@ -16,7 +16,7 @@ function DirectoryFiles({ files }: { files: I_File[] }) {
                     <div key={file.id} className="flex flex-col items-center justify-center w-full">
                         <div
                             onDoubleClick={(e) => onDoubleClick(e, file)}
-                            className="text-white group flex flex-col items-center w-full cursor-pointer p-2 hover:bg-gray-700 rounded transition-colors"
+                            className="text-xs font-medium text-white group flex flex-col items-center w-full cursor-pointer p-2 hover:bg-gray-700 rounded transition-colors"
                         >
                             {file.type === "directory" ? (
                                 <FaFolder
