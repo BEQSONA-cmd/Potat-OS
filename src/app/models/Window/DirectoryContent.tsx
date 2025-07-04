@@ -20,12 +20,12 @@ function DirectoryFiles({ files }: { files: I_File[] }) {
                         >
                             {file.type === "directory" ? (
                                 <FaFolder
-                                    size={64}
+                                    size={40}
                                     className="text-yellow-500 group-hover:text-yellow-400 transition-colors"
                                 />
                             ) : (
                                 <FaFile
-                                    size={64}
+                                    size={40}
                                     className="text-blue-500 group-hover:text-blue-400 transition-colors"
                                 />
                             )}
