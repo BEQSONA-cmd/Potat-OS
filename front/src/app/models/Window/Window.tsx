@@ -1,10 +1,12 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { FaRegWindowClose } from "react-icons/fa";
+import { VscChromeMinimize } from "react-icons/vsc";
+import { IoClose } from "react-icons/io5";
 import { I_Point, I_Window, useWindows } from "../../../components/contexts/WindowContext";
 import { DirectoryContent } from "./DirectoryContent";
 import { FileContent } from "./FileContent";
+import BackgroundContent from "./BackgroundContent";
 
 interface WindowProps {
     fileWindow: I_Window;
@@ -121,15 +123,26 @@ export default function Window({ fileWindow }: WindowProps) {
         >
             <div ref={headerRef} className="flex items-center justify-between bg-gray-700 p-2 rounded-t-md cursor-move">
                 <h3 className="text-white font-medium">{fileWindow.file.name}</h3>
-                <button onClick={onClose} className="text-white hover:text-red-500 focus:outline-none" title="Close">
-                    <FaRegWindowClose size={20} />
-                </button>
+                <div className="flex items-center gap-3 ml-auto">
+                    <button className="text-white hover:text-blue-500 focus:outline-none">
+                        <VscChromeMinimize size={20} />
+                    </button>
+                    <button
+                        onClick={onClose}
+                        className="text-white hover:text-red-500 focus:outline-none"
+                        title="Close"
+                    >
+                        <IoClose size={20} />
+                    </button>
+                </div>
             </div>
             <div className="flex-1 overflow-auto p-4">
-                {fileWindow.file.type === "directory" ? (
-                    <DirectoryContent file={fileWindow.file} />
-                ) : (
+                {fileWindow.file.type === "file" ? (
                     <FileContent file={fileWindow.file} />
+                ) : fileWindow.file.type === "settings" ? (
+                    <BackgroundContent />
+                ) : (
+                    <DirectoryContent file={fileWindow.file} />
                 )}
             </div>
             <div className="flex justify-end gap-2 p-2 bg-gray-700 rounded-b-md"></div>

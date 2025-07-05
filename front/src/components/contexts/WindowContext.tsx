@@ -3,7 +3,7 @@
 import { createContext, useContext, useState, ReactNode } from "react";
 import { I_File } from "./FileContext";
 import { useDockApps } from "./DockContext";
-import { FaFile, FaFolder } from "react-icons/fa";
+import { FaFile, FaFolder, FaDesktop } from "react-icons/fa";
 
 export interface I_Point {
     x: number;
@@ -52,14 +52,22 @@ export const WindowsProvider = ({ children }: { children: ReactNode }) => {
             id: crypto.randomUUID(),
             file,
             position,
-            size: { x: 500, y: 350 },
+            size: { x: 600, y: 500 },
         };
         setCurrentFileId(newWindow.id);
         setWindows((prev) => [...prev, newWindow]);
+        let icon: ReactNode;
+        if (file.type === "directory") {
+            icon = <FaFolder />;
+        } else if (file.type === "settings") {
+            icon = <FaDesktop />;
+        } else {
+            icon = <FaFile />;
+        }
 
         addDockApp({
             name: file.name,
-            icon: file.type === "file" ? <FaFile /> : <FaFolder />,
+            icon: icon,
             onClick: () => setCurrentFileId(newWindow.id),
         });
         setCurrentAppName(file.name);
