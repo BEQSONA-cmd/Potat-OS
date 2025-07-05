@@ -20,3 +20,47 @@ export function getCloseDirectory(position: I_Point, files: I_File[]): string {
     });
     return closestDirectoryId;
 }
+
+export function getFileStyle(fileName: string): { style: string; language?: string } {
+    const ext = fileName.split(".").pop()?.toLowerCase();
+    switch (ext) {
+        case "md":
+            return { style: "readme" };
+        case "txt":
+            return { style: "basic" };
+        case "js":
+            return { style: "code", language: "javascript" };
+        case "ts":
+            return { style: "code", language: "typescript" };
+        case "jsx":
+            return { style: "code", language: "jsx" };
+        case "tsx":
+            return { style: "code", language: "tsx" };
+        case "css":
+            return { style: "code", language: "css" };
+        case "html":
+            return { style: "code", language: "html" };
+        case "c":
+            return { style: "code", language: "c" };
+        case "cpp":
+            return { style: "code", language: "cpp" };
+        case "py":
+            return { style: "code", language: "python" };
+        case "java":
+            return { style: "code", language: "java" };
+        case "json":
+            return { style: "code", language: "json" };
+        case "yaml":
+            return { style: "code", language: "yaml" };
+        case "yml":
+            return { style: "code", language: "yaml" };
+        case "sh":
+            return { style: "code", language: "bash" };
+        case "bash":
+            return { style: "code", language: "bash" };
+        case "php":
+            return { style: "code", language: "php" };
+        default:
+            return { style: "basic" };
+    }
+}

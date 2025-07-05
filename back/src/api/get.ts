@@ -44,9 +44,9 @@ async function getFileContents(url: string): Promise<string> {
     }
 }
 
-async function fetchRepoContents(path: string = ""): Promise<I_File[]> {
+async function fetchRepoContents(repoName: string, path: string = ""): Promise<I_File[]> {
     try {
-        const url = `${GITHUB_API}/repos/${REPO_OWNER}/${REPO_NAME}/contents/${path}`;
+        const url = `${GITHUB_API}/repos/${repoName}/${REPO_NAME}/contents/${path}`;
         const response = await axios.get(url, {
             headers: {
                 Accept: "application/vnd.github.v3+json",
@@ -67,7 +67,7 @@ async function fetchRepoContents(path: string = ""): Promise<I_File[]> {
                         name: item.name,
                         type: "directory",
                         position: newPosition,
-                        content: await fetchRepoContents(item.path),
+                        content: await fetchRepoContents(repoName, item.path),
                     };
                 } else {
                     return {
@@ -97,7 +97,8 @@ export default async function getRoutes(fastify: FastifyInstance) {
         REPO_NAME = repoName;
 
         try {
-            const repoContents = await fetchRepoContents("");
+            const repoContents = await fetchRepoContents(repoName, "");
+            console.log("Fetched repository contents:", repoContents);
 
             const responseData = {
                 id: generateId(),
