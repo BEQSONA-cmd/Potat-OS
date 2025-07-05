@@ -18,14 +18,17 @@ export default function Window({ fileWindow }: WindowProps) {
     const windowRef = useRef<HTMLDivElement>(null);
     const headerRef = useRef<HTMLDivElement>(null);
     const resizeHandleRef = useRef<HTMLDivElement>(null);
-    const { closeWindow, setCurrentWindow, currentFileId } = useWindows();
+    const { minimizeWindow, closeWindow, setCurrentWindow, currentFileId } = useWindows();
 
     const onClose = () => {
         closeWindow(fileWindow.id);
     };
+    const onMinimize = () => {
+        minimizeWindow(fileWindow.id);
+    };
 
     useEffect(() => {
-        if (!headerRef.current) return;
+        if (!headerRef.current || fileWindow.minimized) return;
 
         const header = headerRef.current;
         let offsetX = 0;
@@ -60,10 +63,10 @@ export default function Window({ fileWindow }: WindowProps) {
         return () => {
             header.removeEventListener("mousedown", handleMouseDown);
         };
-    }, [position]);
+    }, [position, fileWindow.minimized]);
 
     useEffect(() => {
-        if (!resizeHandleRef.current) return;
+        if (!resizeHandleRef.current || fileWindow.minimized) return;
 
         const resizeHandle = resizeHandleRef.current;
         let startX = 0;
@@ -102,7 +105,11 @@ export default function Window({ fileWindow }: WindowProps) {
         return () => {
             resizeHandle.removeEventListener("mousedown", handleMouseDown);
         };
-    }, [size]);
+    }, [size, fileWindow.minimized]);
+
+    if (fileWindow.minimized) {
+        return null;
+    }
 
     return (
         <div
@@ -124,7 +131,11 @@ export default function Window({ fileWindow }: WindowProps) {
             <div ref={headerRef} className="flex items-center justify-between bg-gray-700 p-2 rounded-t-md cursor-move">
                 <h3 className="text-white font-medium">{fileWindow.file.name}</h3>
                 <div className="flex items-center gap-3 ml-auto">
-                    <button className="text-white hover:text-blue-500 focus:outline-none">
+                    <button
+                        onClick={onMinimize}
+                        className="text-white hover:text-blue-500 focus:outline-none"
+                        title="Minimize"
+                    >
                         <VscChromeMinimize size={20} />
                     </button>
                     <button

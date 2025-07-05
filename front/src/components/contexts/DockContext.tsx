@@ -5,6 +5,7 @@ import { FaFirefoxBrowser } from "react-icons/fa";
 import { ImTerminal } from "react-icons/im";
 
 export interface I_DockApp {
+    id: string;
     name: string;
     icon: React.ReactNode;
     onClick: () => void;
@@ -24,11 +25,13 @@ const DockAppsContext = createContext<DockAppsContextType | undefined>(undefined
 export const DockAppsProvider = ({ children }: { children: ReactNode }) => {
     const [dockApps, setDockApps] = useState<I_DockApp[]>([
         {
+            id: crypto.randomUUID(),
             name: "Firefox",
             icon: <FaFirefoxBrowser />,
             onClick: () => console.log("Open Firefox"),
         },
         {
+            id: crypto.randomUUID(),
             name: "Terminal",
             icon: <ImTerminal />,
             onClick: () => console.log("Open Terminal"),

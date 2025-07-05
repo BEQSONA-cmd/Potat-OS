@@ -1,12 +1,15 @@
 import { TbGridDots } from "react-icons/tb";
 import { I_DockApp, useDockApps } from "./contexts/DockContext";
+import { useWindows } from "./contexts/WindowContext";
 
 function AppCard({ app }: { app: I_DockApp }) {
     const { currentAppName, setCurrentAppName } = useDockApps();
+    const { maximizeWindow } = useWindows();
 
     const handleClick = () => {
         app.onClick();
         setCurrentAppName(app.name);
+        maximizeWindow(app.id);
     };
 
     return (
@@ -41,6 +44,7 @@ export default function Dock() {
             <div className="h-8 w-px bg-gray-600"></div>
             <AppCard
                 app={{
+                    id: "apps-menu",
                     name: "Apps",
                     icon: <TbGridDots />,
                     onClick: () => console.log("Open Apps Menu"),

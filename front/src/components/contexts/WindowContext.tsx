@@ -15,6 +15,7 @@ export interface I_Window {
     file: I_File;
     position: I_Point;
     size: I_Point;
+    minimized: boolean;
 }
 
 interface WindowsContextType {
@@ -23,6 +24,8 @@ interface WindowsContextType {
     setWindows: (windows: I_Window[]) => void;
     setCurrentFileId: (id: string | null) => void;
     setCurrentWindow: (id: string | null) => void;
+    minimizeWindow: (id: string) => void;
+    maximizeWindow: (id: string) => void;
     openWindow: (file: I_File, position: I_Point) => void;
     updateWindowPosition: (windowId: string, position: I_Point) => void;
     updateWindowSize: (windowId: string, size: I_Point) => void;
@@ -53,6 +56,7 @@ export const WindowsProvider = ({ children }: { children: ReactNode }) => {
             file,
             position,
             size: { x: 600, y: 500 },
+            minimized: false,
         };
         setCurrentFileId(newWindow.id);
         setWindows((prev) => [...prev, newWindow]);
@@ -66,6 +70,7 @@ export const WindowsProvider = ({ children }: { children: ReactNode }) => {
         }
 
         addDockApp({
+            id: newWindow.id,
             name: file.name,
             icon: icon,
             onClick: () => setCurrentFileId(newWindow.id),
@@ -91,6 +96,13 @@ export const WindowsProvider = ({ children }: { children: ReactNode }) => {
         setCurrentAppName(null);
     };
 
+    const minimizeWindow = (id: string) => {
+        setWindows((prev) => prev.map((w) => (w.id === id ? { ...w, minimized: true } : w)));
+    };
+    const maximizeWindow = (id: string) => {
+        setWindows((prev) => prev.map((w) => (w.id === id ? { ...w, minimized: false } : w)));
+    };
+
     const findWindowId = (fileId: string): string | undefined => {
         const window = windows.find((w) => w.file.id === fileId);
         return window ? window.id : undefined;
@@ -114,6 +126,8 @@ export const WindowsProvider = ({ children }: { children: ReactNode }) => {
                 updateWindowPosition,
                 updateWindowSize,
                 closeWindow,
+                minimizeWindow,
+                maximizeWindow,
                 fileUpdate,
                 findWindowId,
             }}
