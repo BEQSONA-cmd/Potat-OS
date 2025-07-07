@@ -97,7 +97,9 @@ function File({ file }: { file: I_File }) {
             {editFileId === file.id ? (
                 <NameInput file={file} />
             ) : (
-                <span className="mt-1 truncate w-full text-center">{file.name}</span>
+                <span className="mt-1 truncate w-full text-center">
+                    {file.name.length > 12 ? `${file.name.slice(0, 10)}...` : file.name}
+                </span>
             )}
         </div>
     );
@@ -122,7 +124,7 @@ export default function Files() {
                 files.map((file) => (
                     <div
                         key={file.id}
-                        className="relative "
+                        className="absolute"
                         style={{
                             zIndex: file.id === currentFileId ? 10 : 1,
                         }}
