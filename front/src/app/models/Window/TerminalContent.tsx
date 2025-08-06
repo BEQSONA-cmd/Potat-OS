@@ -1,5 +1,5 @@
 "use client";
-import { keyHook, prompt } from "@/components/Terminal/init";
+import { firstPrompt, keyHook } from "@/components/Terminal/init";
 import { useEffect, useRef } from "react";
 import { Terminal } from "xterm";
 
@@ -16,7 +16,7 @@ export default function TerminalContent() {
             terminal = allocTerm();
             terminal.open(terminalRef.current!);
 
-            prompt(terminal);
+            firstPrompt(terminal);
             keyHook(terminal);
         }
 

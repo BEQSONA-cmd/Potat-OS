@@ -1,8 +1,15 @@
 import "xterm/css/xterm.css";
 import { Terminal } from "xterm";
 
-export function prompt(term: Terminal) {
+function prompt(term: Terminal) {
     term.write("\r\n");
+    term.write("\x1b[32mPotatOS@User:");
+    term.write("\x1b[34m~/Desktop");
+    term.write("\x1b[0m$ ");
+}
+
+export function firstPrompt(term: Terminal) {
+    term.write("\r");
     term.write("\x1b[32mPotatOS@User:");
     term.write("\x1b[34m~/Desktop");
     term.write("\x1b[0m$ ");
@@ -34,8 +41,11 @@ export function keyHook(term: Terminal) {
         const printable = !ev.altKey && !ev.ctrlKey && !ev.metaKey;
 
         if (ev.key === "Enter") {
-            handleCommand(buffer.trim(), term);
+            const cmd = buffer.trim();
+
+            handleCommand(cmd, term);
             buffer = "";
+
             prompt(term);
         } else if (ev.key === "Backspace") {
             if (buffer.length > 0) {
