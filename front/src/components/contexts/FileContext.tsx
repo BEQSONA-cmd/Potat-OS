@@ -6,7 +6,7 @@ import axios from "axios";
 
 const HOST = process.env.NEXT_PUBLIC_HOST || "http://localhost:8080";
 
-export type FileType = "file" | "directory" | "settings";
+export type FileType = "file" | "directory" | "settings" | "terminal";
 
 export type ContentType = string | I_File[];
 

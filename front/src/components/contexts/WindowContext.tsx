@@ -36,8 +36,37 @@ interface WindowsContextType {
 
 const WindowsContext = createContext<WindowsContextType | undefined>(undefined);
 
+const defaultWindows: I_Window[] = [
+    {
+        id: "terminalId",
+        file: {
+            id: crypto.randomUUID(),
+            name: "Terminal",
+            type: "terminal",
+            position: { x: 100, y: 100 },
+            content: "",
+        },
+        position: { x: 100, y: 100 },
+        size: { x: 600, y: 500 },
+        minimized: true,
+    },
+    {
+        id: "firefoxId",
+        file: {
+            id: crypto.randomUUID(),
+            name: "Firefox",
+            type: "file",
+            position: { x: 100, y: 100 },
+            content: "",
+        },
+        position: { x: 100, y: 100 },
+        size: { x: 600, y: 500 },
+        minimized: true,
+    },
+];
+
 export const WindowsProvider = ({ children }: { children: ReactNode }) => {
-    const [windows, setWindows] = useState<I_Window[]>([]);
+    const [windows, setWindows] = useState<I_Window[]>(defaultWindows.length > 0 ? defaultWindows : []);
     const [currentFileId, setCurrentFileId] = useState<string | null>(null);
     const { addDockApp, removeDockApp, setCurrentAppName } = useDockApps();
 
@@ -70,10 +99,10 @@ export const WindowsProvider = ({ children }: { children: ReactNode }) => {
         }
 
         addDockApp({
+            isDefault: false,
             id: newWindow.id,
             name: file.name,
             icon: icon,
-            onClick: () => setCurrentFileId(newWindow.id),
         });
         setCurrentAppName(file.name);
     };
@@ -87,16 +116,21 @@ export const WindowsProvider = ({ children }: { children: ReactNode }) => {
     };
 
     const closeWindow = (id: string) => {
-        setWindows((prev) => prev.filter((w) => w.id !== id));
-
         const appName = windows.find((w) => w.id === id)?.file.name;
         if (!appName) return;
+        if (appName === "Terminal" || appName === "Firefox") {
+            minimizeWindow(id);
+            return;
+        }
 
+        setWindows((prev) => prev.filter((w) => w.id !== id));
         removeDockApp(appName);
         setCurrentAppName(null);
     };
 
     const minimizeWindow = (id: string) => {
+        setCurrentAppName(null);
+        setTimeout(() => setCurrentAppName(null), 0);
         setWindows((prev) => prev.map((w) => (w.id === id ? { ...w, minimized: true } : w)));
     };
     const maximizeWindow = (id: string) => {

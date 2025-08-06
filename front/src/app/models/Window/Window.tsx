@@ -7,6 +7,7 @@ import { I_Point, I_Window, useWindows } from "../../../components/contexts/Wind
 import { DirectoryContent } from "./DirectoryContent";
 import { FileContent } from "./FileContent";
 import BackgroundContent from "./BackgroundContent";
+import TerminalContent from "./TerminalContent";
 
 interface WindowProps {
     fileWindow: I_Window;
@@ -152,6 +153,8 @@ export default function Window({ fileWindow }: WindowProps) {
                     <FileContent file={fileWindow.file} />
                 ) : fileWindow.file.type === "settings" ? (
                     <BackgroundContent />
+                ) : fileWindow.file.type === "terminal" ? (
+                    <TerminalContent />
                 ) : (
                     <DirectoryContent file={fileWindow.file} />
                 )}
