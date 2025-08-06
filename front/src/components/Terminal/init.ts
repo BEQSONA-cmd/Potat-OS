@@ -1,52 +1,34 @@
 import "xterm/css/xterm.css";
 import { Terminal } from "xterm";
+import { handleCommand } from "./functions";
+import { I_File } from "../contexts/FileContext";
 
-function prompt(term: Terminal) {
-    term.write("\r\n");
-    term.write("\x1b[32mPotatOS@User:");
-    term.write("\x1b[34m~/Desktop");
-    term.write("\x1b[0m$ ");
-}
-
-export function firstPrompt(term: Terminal) {
-    term.write("\r");
-    term.write("\x1b[32mPotatOS@User:");
-    term.write("\x1b[34m~/Desktop");
-    term.write("\x1b[0m$ ");
-}
-
-function handleCommand(cmd: string, term: Terminal) {
-    switch (cmd) {
-        case "clear":
-            term.clear();
-            break;
-        case "ls":
-            term.write("\r\nDocuments  Downloads  Pictures  Desktop");
-            break;
-        case "help":
-            term.write("\r\nAvailable commands: ls, clear, help");
-            break;
-        case "":
-            break;
-        default:
-            term.write(`\r\nCommand not found: ${cmd}`);
+export function prompt(term: Terminal, first: boolean = false) {
+    if (first) {
+        term.write("\r");
+    } else {
+        term.write("\r\n");
     }
+
+    term.write("\x1b[32mPotatOS@User:");
+    term.write("\x1b[34m~/Desktop");
+    term.write("\x1b[0m$ ");
 }
 
-export function keyHook(term: Terminal) {
+export function keyHook(term: Terminal, getFiles: () => I_File[]) {
     let buffer = "";
 
     term.onKey(({ key, domEvent }) => {
         const ev = domEvent;
         const printable = !ev.altKey && !ev.ctrlKey && !ev.metaKey;
 
-        if (ev.key === "Enter") {
-            const cmd = buffer.trim();
-
-            handleCommand(cmd, term);
+        if (ev.ctrlKey && ev.key === "c") {
+            term.write("^C\r");
             buffer = "";
-
             prompt(term);
+        } else if (ev.key === "Enter") {
+            handleCommand(buffer, term, getFiles());
+            buffer = "";
         } else if (ev.key === "Backspace") {
             if (buffer.length > 0) {
                 buffer = buffer.slice(0, -1);

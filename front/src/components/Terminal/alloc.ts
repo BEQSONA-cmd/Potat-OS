@@ -1,4 +1,5 @@
 import { Terminal } from "xterm";
+import { FitAddon } from "xterm-addon-fit";
 
 export function allocTerm(): Terminal {
     return new Terminal({
@@ -10,4 +11,8 @@ export function allocTerm(): Terminal {
             background: "#111827",
         },
     });
+}
+
+export function initFitAddon(): FitAddon {
+    return new FitAddon();
 }
