@@ -23,6 +23,7 @@ fastify.register(getRoutes);
 
 const startServer = async () => {
     try {
+        console.log("host: ", HOST);
         await fastify.listen({ port: 8001, host: "0.0.0.0" });
         console.log("Fastify server is running on https://localhost:8001");
     } catch (err) {
