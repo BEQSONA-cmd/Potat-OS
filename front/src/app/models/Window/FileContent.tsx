@@ -86,7 +86,7 @@ export function FileContent({ file }: { file: I_File }) {
     }, [isEditing]);
 
     return (
-        <div onDoubleClick={handleDoubleClick} className="h-full w-full">
+        <div onDoubleClick={handleDoubleClick} className="p-4 h-full w-full">
             {isEditing ? (
                 <textarea
                     ref={textareaRef}

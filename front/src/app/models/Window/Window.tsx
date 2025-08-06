@@ -148,7 +148,7 @@ export default function Window({ fileWindow }: WindowProps) {
                     </button>
                 </div>
             </div>
-            <div className="flex-1 overflow-auto p-4">
+            <div className="flex-1 overflow-auto">
                 {fileWindow.file.type === "file" ? (
                     <FileContent file={fileWindow.file} />
                 ) : fileWindow.file.type === "settings" ? (
