@@ -49,7 +49,7 @@ interface getRepoParams {
 
 async function getRepo({ repoName }: getRepoParams) {
     try {
-        const response = await axios.get(`${HOST}/api/test`, {
+        const response = await axios.get(`${HOST}/api/get`, {
             params: {
                 repoName: repoName,
             },
