@@ -1,7 +1,7 @@
 import { FastifyInstance } from "fastify";
 
 export default async function testRoutes(fastify: FastifyInstance) {
-    fastify.get("/git/api/test", async (req, res) => {
+    fastify.get("/api/test", async (req, res) => {
         try {
             const response = {
                 message: "Test endpoint is working",
