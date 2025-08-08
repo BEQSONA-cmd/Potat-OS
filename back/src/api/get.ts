@@ -3,7 +3,7 @@ import { getNewResponseData } from "./repos";
 import File from "../data/models/files";
 
 export default async function getRoutes(fastify: FastifyInstance) {
-  fastify.get("/api/get", async (req, res) => {
+  fastify.get("/git/api/get", async (req, res) => {
     const { repoName: repoName } = req.query as { repoName: string };
     if (!repoName) {
       return res.code(400).send({ message: "Repository name is required" });
