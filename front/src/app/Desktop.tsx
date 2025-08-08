@@ -51,7 +51,7 @@ export default function Desktop() {
     return (
         <div
             ref={desktopRef}
-            className="w-screen h-screen relative overflow-hidden text-white select-none"
+            className="w-screen h-screen relative overflow-hidden text-white select-none overflow-x-hidden"
             onContextMenu={openContextMenu}
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}

@@ -10,7 +10,7 @@ function DirectoryFiles({ files }: { files: I_File[] }) {
     }
 
     return (
-        <div className="h-full w-full">
+        <div className="h-full w-full p-4">
             <div className="grid grid-cols-auto-fill gap-2">
                 {files.map((file) => (
                     <div key={file.id} className="flex flex-col items-center justify-center w-full">

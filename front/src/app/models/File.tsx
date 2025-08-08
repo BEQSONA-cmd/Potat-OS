@@ -74,7 +74,7 @@ function File({ file }: { file: I_File }) {
         <div
             key={file.id}
             title={file.name}
-            className="absolute flex flex-col items-center justify-center text-white text-xs cursor-pointer font-medium group p-2 hover:bg-gray-600 hover:bg-opacity-50 rounded transition-colors resize-container"
+            className="absolute w-24 h-20 flex flex-col items-center justify-start text-white text-xs cursor-pointer font-medium group p-2 hover:bg-gray-600 hover:bg-opacity-50 rounded transition-colors"
             style={{ top: file.position.y, left: file.position.x }}
             onDoubleClick={(e) => onDoubleClick(e, file)}
             onMouseDown={(e) => onMouseDown(e, file)}

@@ -1,5 +1,6 @@
 node_modules
 package-lock.json
+database.db
 ssl/cert.pem
 ssl/key.pem
 .env

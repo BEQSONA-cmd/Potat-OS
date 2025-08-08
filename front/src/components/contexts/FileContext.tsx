@@ -6,7 +6,7 @@ import axios from "axios";
 
 const HOST = process.env.NEXT_PUBLIC_HOST || "http://localhost:8080";
 
-export type FileType = "file" | "directory" | "settings" | "terminal";
+export type FileType = "file" | "directory" | "settings" | "terminal" | "firefox";
 
 export type ContentType = string | I_File[];
 
@@ -96,7 +96,7 @@ export const FilesProvider = ({ children }: { children: ReactNode }) => {
                     const finalFile = changeFilePosition(file, prevPosition);
                     addFile(finalFile);
                 }
-                prevPosition = { x: prevPosition.x + 100, y: prevPosition.y };
+                prevPosition = { x: prevPosition.x, y: prevPosition.y + 100 };
             }
         })();
     }, []);

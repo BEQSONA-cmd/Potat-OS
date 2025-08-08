@@ -19,6 +19,7 @@ export default async function getRoutes(fastify: FastifyInstance) {
             if (existingRepo) {
                 responseData = existingRepo;
             } else {
+                console.log(`Fetching new repository data for: ${repoName}`);
                 const newData = await getNewResponseData(repoName);
 
                 const saved = await File.create({
@@ -27,6 +28,7 @@ export default async function getRoutes(fastify: FastifyInstance) {
                     position: newData.position,
                     content: newData.content,
                 });
+                console.log(`New repository data saved: ${repoName}`);
                 responseData = saved;
             }
 

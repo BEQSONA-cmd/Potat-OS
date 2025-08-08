@@ -8,6 +8,7 @@ import { DirectoryContent } from "./DirectoryContent";
 import { FileContent } from "./FileContent";
 import BackgroundContent from "./BackgroundContent";
 import TerminalContent from "./TerminalContent";
+import FirefoxContent from "./FirefoxContent";
 
 interface WindowProps {
     fileWindow: I_Window;
@@ -155,6 +156,8 @@ export default function Window({ fileWindow }: WindowProps) {
                     <BackgroundContent />
                 ) : fileWindow.file.type === "terminal" ? (
                     <TerminalContent />
+                ) : fileWindow.file.type === "firefox" ? (
+                    <FirefoxContent />
                 ) : (
                     <DirectoryContent file={fileWindow.file} />
                 )}

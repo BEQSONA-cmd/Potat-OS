@@ -85,8 +85,16 @@ export function FileContent({ file }: { file: I_File }) {
         };
     }, [isEditing]);
 
+    if (getFileStyle(file.name).style === "image") {
+        return (
+            <div className="h-full w-full flex items-center justify-center">
+                <img src={file.content as string} alt="GIF content" className="max-h-full max-w-full object-contain" />
+            </div>
+        );
+    }
+
     return (
-        <div onDoubleClick={handleDoubleClick} className="p-4 h-full w-full">
+        <div onDoubleClick={handleDoubleClick} className=" h-full w-full">
             {isEditing ? (
                 <textarea
                     ref={textareaRef}

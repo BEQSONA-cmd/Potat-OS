@@ -55,7 +55,7 @@ const defaultWindows: I_Window[] = [
         file: {
             id: crypto.randomUUID(),
             name: "Firefox",
-            type: "file",
+            type: "firefox",
             position: { x: 100, y: 100 },
             content: "",
         },
