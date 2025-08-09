@@ -3,10 +3,30 @@
 import { createContext, useContext, useState, ReactNode, useEffect } from "react";
 import { I_Point, useWindows } from "./WindowContext";
 import axios from "axios";
+import { FaDesktop, FaFile, FaFirefoxBrowser, FaFolder } from "react-icons/fa";
+import { ImTerminal } from "react-icons/im";
+import { IconType } from "react-icons";
 
 const HOST = process.env.NEXT_PUBLIC_HOST || "http://localhost:8080";
 
 export type FileType = "file" | "directory" | "settings" | "terminal" | "firefox";
+
+export function getFileIcon(type: FileType): ReactNode {
+    switch (type) {
+        case "file":
+            return <FaFile />;
+        case "directory":
+            return <FaFolder />;
+        case "settings":
+            return <FaDesktop />;
+        case "terminal":
+            return <ImTerminal />;
+        case "firefox":
+            return <FaFirefoxBrowser />;
+        default:
+            return null;
+    }
+}
 
 export type ContentType = string | I_File[];
 
@@ -14,6 +34,7 @@ export interface I_File {
     id: string;
     name: string;
     type: FileType;
+    icon: IconType;
     position: I_Point;
     content: ContentType;
 }
@@ -74,8 +95,10 @@ function changeFilePosition(file: I_File, position: I_Point): I_File {
     };
 }
 
+const defaultFiles: I_File[] = [];
+
 export const FilesProvider = ({ children }: { children: ReactNode }) => {
-    const [files, setFiles] = useState<I_File[] | null>(null);
+    const [files, setFiles] = useState<I_File[] | null>(defaultFiles);
     const [editFileId, setEditFileId] = useState<string | null>(null);
     const [currentFileId, setCurrentFileId] = useState<string | null>(null);
     const [fileCount, setFileCount] = useState(0);
@@ -87,19 +110,19 @@ export const FilesProvider = ({ children }: { children: ReactNode }) => {
         setFiles((prevFiles) => [...(prevFiles || []), file]);
     };
 
-    useEffect(() => {
-        (async () => {
-            let prevPosition = { x: 0, y: 0 };
-            for (const name of repoNames) {
-                const file = await getRepo({ repoName: name });
-                if (file) {
-                    const finalFile = changeFilePosition(file, prevPosition);
-                    addFile(finalFile);
-                }
-                prevPosition = { x: prevPosition.x, y: prevPosition.y + 100 };
-            }
-        })();
-    }, []);
+    // useEffect(() => {
+    //     (async () => {
+    //         let prevPosition = { x: 0, y: 0 };
+    //         for (const name of repoNames) {
+    //             const file = await getRepo({ repoName: name });
+    //             if (file) {
+    //                 const finalFile = changeFilePosition(file, prevPosition);
+    //                 addFile(finalFile);
+    //             }
+    //             prevPosition = { x: prevPosition.x, y: prevPosition.y + 100 };
+    //         }
+    //     })();
+    // }, []);
 
     function findFile(id: string, searchFiles?: I_File[]): I_File | undefined {
         const filesToSearch = searchFiles || files;

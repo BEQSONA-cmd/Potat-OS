@@ -1,10 +1,12 @@
 import { TbGridDots } from "react-icons/tb";
 import { I_DockApp, useDockApps } from "./contexts/DockContext";
 import { useWindows } from "./contexts/WindowContext";
+import { IconType } from "react-icons";
 
 function AppCard({ app }: { app: I_DockApp }) {
     const { currentAppName, setCurrentAppName } = useDockApps();
     const { maximizeWindow, setCurrentFileId } = useWindows();
+    const Icon: IconType = app.icon;
 
     const handleClick = () => {
         setCurrentAppName(app.name);
@@ -24,7 +26,7 @@ function AppCard({ app }: { app: I_DockApp }) {
                 }`}
                 onClick={handleClick}
             >
-                {app.icon}
+                <Icon className="text-white" size={30} />
             </button>
             <span className="opacity-0 group-hover:opacity-100 transition-opacity text-xs mb-3 bg-black bg-opacity-80 px-2 py-0.5 rounded border border-gray-400 absolute -translate-y-7">
                 {app.name}
@@ -47,7 +49,7 @@ export default function Dock() {
                     isDefault: true,
                     id: "apps-menu",
                     name: "Apps",
-                    icon: <TbGridDots />,
+                    icon: TbGridDots,
                 }}
             />
         </div>

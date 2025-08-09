@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState, ReactNode } from "react";
+import { IconType } from "react-icons";
 import { FaFirefoxBrowser } from "react-icons/fa";
 import { ImTerminal } from "react-icons/im";
 
@@ -8,7 +9,7 @@ export interface I_DockApp {
     isDefault: boolean;
     id: string;
     name: string;
-    icon: React.ReactNode;
+    icon: IconType;
 }
 
 interface DockAppsContextType {
@@ -28,13 +29,13 @@ export const DockAppsProvider = ({ children }: { children: ReactNode }) => {
             isDefault: true,
             id: "firefoxId",
             name: "Firefox",
-            icon: <FaFirefoxBrowser />,
+            icon: FaFirefoxBrowser,
         },
         {
             isDefault: true,
             id: "terminalId",
             name: "Terminal",
-            icon: <ImTerminal />,
+            icon: ImTerminal,
         },
     ]);
     const [currentAppName, setCurrentAppName] = useState<string | null>(null);

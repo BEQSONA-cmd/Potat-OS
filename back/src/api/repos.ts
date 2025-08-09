@@ -66,8 +66,8 @@ async function fetchRepoContents(repoName: string, path: string = ""): Promise<I
         const contents: I_File[] = await Promise.all(
             response.data.map(async (item: any, index: number) => {
                 const newPosition = {
-                    x: 50,
-                    y: 50,
+                    x: 0,
+                    y: 0,
                 };
 
                 if (item.type === "dir") {
@@ -106,7 +106,7 @@ export async function getNewResponseData(repoName: string) {
         id: generateId(),
         name: repoName,
         type: "directory",
-        position: { x: 50, y: 50 },
+        position: { x: 10, y: 50 },
         content: repoContents,
     };
 

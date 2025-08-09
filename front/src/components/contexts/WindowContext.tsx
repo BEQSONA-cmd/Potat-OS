@@ -3,7 +3,9 @@
 import { createContext, useContext, useState, ReactNode } from "react";
 import { I_File } from "./FileContext";
 import { useDockApps } from "./DockContext";
-import { FaFile, FaFolder, FaDesktop } from "react-icons/fa";
+import { FaFile, FaFolder, FaDesktop, FaFirefoxBrowser } from "react-icons/fa";
+import { ImTerminal } from "react-icons/im";
+import { IconType } from "react-icons";
 
 export interface I_Point {
     x: number;
@@ -43,6 +45,7 @@ const defaultWindows: I_Window[] = [
             id: crypto.randomUUID(),
             name: "Terminal",
             type: "terminal",
+            icon: ImTerminal,
             position: { x: 100, y: 100 },
             content: "",
         },
@@ -56,6 +59,7 @@ const defaultWindows: I_Window[] = [
             id: crypto.randomUUID(),
             name: "Firefox",
             type: "firefox",
+            icon: FaFirefoxBrowser,
             position: { x: 100, y: 100 },
             content: "",
         },
@@ -89,20 +93,12 @@ export const WindowsProvider = ({ children }: { children: ReactNode }) => {
         };
         setCurrentFileId(newWindow.id);
         setWindows((prev) => [...prev, newWindow]);
-        let icon: ReactNode;
-        if (file.type === "directory") {
-            icon = <FaFolder />;
-        } else if (file.type === "settings") {
-            icon = <FaDesktop />;
-        } else {
-            icon = <FaFile />;
-        }
 
         addDockApp({
             isDefault: false,
             id: newWindow.id,
             name: file.name,
-            icon: icon,
+            icon: file.icon,
         });
         setCurrentAppName(file.name);
     };

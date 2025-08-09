@@ -1,3 +1,4 @@
+import { FaDesktop, FaFile, FaFolder } from "react-icons/fa";
 import { IContextMenu } from "../../components/contexts/ContextMenuContext";
 import { I_File, useFiles } from "../../components/contexts/FileContext";
 import { I_Point, useWindows } from "../../components/contexts/WindowContext";
@@ -13,6 +14,7 @@ export function ContextMenu({ context }: { context: IContextMenu }) {
             id: crypto.randomUUID(),
             name: "Background",
             type: "settings",
+            icon: FaDesktop,
             position,
             content: "",
         };
@@ -30,6 +32,7 @@ export function ContextMenu({ context }: { context: IContextMenu }) {
             id: crypto.randomUUID(),
             name,
             type: "file" as const,
+            icon: FaFile,
             position,
             content: "",
         };
@@ -46,6 +49,7 @@ export function ContextMenu({ context }: { context: IContextMenu }) {
             id: crypto.randomUUID(),
             name,
             type: "directory" as const,
+            icon: FaFolder,
             position,
             content: [],
         };

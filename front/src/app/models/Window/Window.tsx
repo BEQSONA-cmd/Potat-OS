@@ -9,6 +9,7 @@ import { FileContent } from "./FileContent";
 import BackgroundContent from "./BackgroundContent";
 import TerminalContent from "./TerminalContent";
 import FirefoxContent from "./FirefoxContent";
+import { IconType } from "react-icons";
 
 interface WindowProps {
     fileWindow: I_Window;
@@ -21,7 +22,7 @@ export default function Window({ fileWindow }: WindowProps) {
     const headerRef = useRef<HTMLDivElement>(null);
     const resizeHandleRef = useRef<HTMLDivElement>(null);
     const { minimizeWindow, closeWindow, setCurrentWindow, currentFileId } = useWindows();
-
+    const Icon = fileWindow.file.icon as IconType;
     const onClose = () => {
         closeWindow(fileWindow.id);
     };
@@ -131,7 +132,10 @@ export default function Window({ fileWindow }: WindowProps) {
             }}
         >
             <div ref={headerRef} className="flex items-center justify-between bg-gray-700 p-2 rounded-t-md cursor-move">
-                <h3 className="text-white font-medium">{fileWindow.file.name}</h3>
+                <div className="flex items-center gap-2">
+                    <Icon className="text-white" size={20} />
+                    <h3 className="text-white font-medium">{fileWindow.file.name}</h3>
+                </div>
                 <div className="flex items-center gap-3 ml-auto">
                     <button
                         onClick={onMinimize}
