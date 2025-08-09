@@ -14,7 +14,6 @@ export function ContextMenu({ context }: { context: IContextMenu }) {
             id: crypto.randomUUID(),
             name: "Background",
             type: "settings",
-            icon: FaDesktop,
             position,
             content: "",
         };
@@ -32,7 +31,6 @@ export function ContextMenu({ context }: { context: IContextMenu }) {
             id: crypto.randomUUID(),
             name,
             type: "file" as const,
-            icon: FaFile,
             position,
             content: "",
         };
@@ -49,7 +47,6 @@ export function ContextMenu({ context }: { context: IContextMenu }) {
             id: crypto.randomUUID(),
             name,
             type: "directory" as const,
-            icon: FaFolder,
             position,
             content: [],
         };
