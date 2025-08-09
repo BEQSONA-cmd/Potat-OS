@@ -9,7 +9,7 @@ import { FileContent } from "./FileContent";
 import BackgroundContent from "./BackgroundContent";
 import TerminalContent from "./TerminalContent";
 import FirefoxContent from "./FirefoxContent";
-import { IconType } from "react-icons";
+import { getFileIcon } from "@/components/contexts/FileContext";
 
 interface WindowProps {
     fileWindow: I_Window;
@@ -22,7 +22,7 @@ export default function Window({ fileWindow }: WindowProps) {
     const headerRef = useRef<HTMLDivElement>(null);
     const resizeHandleRef = useRef<HTMLDivElement>(null);
     const { minimizeWindow, closeWindow, setCurrentWindow, currentFileId } = useWindows();
-    const Icon = fileWindow.file.icon as IconType;
+    const Icon = getFileIcon(fileWindow.file.type);
     const onClose = () => {
         closeWindow(fileWindow.id);
     };

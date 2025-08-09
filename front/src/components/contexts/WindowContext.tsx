@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState, ReactNode } from "react";
-import { I_File } from "./FileContext";
+import { getFileIcon, I_File } from "./FileContext";
 import { useDockApps } from "./DockContext";
 import { FaFile, FaFolder, FaDesktop, FaFirefoxBrowser } from "react-icons/fa";
 import { ImTerminal } from "react-icons/im";
@@ -45,7 +45,6 @@ const defaultWindows: I_Window[] = [
             id: crypto.randomUUID(),
             name: "Terminal",
             type: "terminal",
-            icon: ImTerminal,
             position: { x: 100, y: 100 },
             content: "",
         },
@@ -59,7 +58,6 @@ const defaultWindows: I_Window[] = [
             id: crypto.randomUUID(),
             name: "Firefox",
             type: "firefox",
-            icon: FaFirefoxBrowser,
             position: { x: 100, y: 100 },
             content: "",
         },
@@ -98,7 +96,7 @@ export const WindowsProvider = ({ children }: { children: ReactNode }) => {
             isDefault: false,
             id: newWindow.id,
             name: file.name,
-            icon: file.icon,
+            icon: getFileIcon(file.type),
         });
         setCurrentAppName(file.name);
     };
