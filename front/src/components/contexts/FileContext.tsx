@@ -7,7 +7,7 @@ import { useDockApps } from "./DockContext";
 
 const HOST = process.env.NEXT_PUBLIC_HOST || "http://localhost:8080";
 
-export type FileType = "file" | "directory" | "settings" | "terminal" | "firefox";
+export type FileType = "file" | "directory" | "settings" | "terminal" | "firefox" | "profile";
 
 export type ContentType = string | I_File[];
 
@@ -75,19 +75,45 @@ function changeFilePosition(file: I_File, position: I_Point): I_File {
     };
 }
 
+const socials = [
+  {
+    name: "GitHub",
+    url: "https://github.com/BEQSONA-cmd"
+  },
+  {
+    name: "LinkedIn",
+    url: "https://www.linkedin.com/in/beqa-tvildiani-8a6b21276/"
+  },
+  {
+    name: "Email",
+    url: "tvildiani2001@gmail.com"
+  },
+  {
+    name: "Portfolio",
+    url: "https://beqa.live"
+  }
+];
+
 const defaultFiles: I_File[] = [
     {
         id: "terminalId",
         name: "Terminal",
         type: "terminal",
-        position: { x: 10, y: 550 },
+        position: { x: 10, y: 50 },
         content: "",
     },
     {
         id: "firefoxId",
         name: "Firefox",
         type: "firefox",
-        position: { x: 10, y: 650 },
+        position: { x: 10, y: 150 },
+        content: "",
+    },
+    {
+        id: "profileId",
+        name: "Profile",
+        type: "profile",
+        position: { x: 10, y: 250 },
         content: "",
     },
 ];

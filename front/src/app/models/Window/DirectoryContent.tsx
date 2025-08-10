@@ -1,5 +1,4 @@
 import { I_File, useFiles } from "@/components/contexts/FileContext";
-import { FaFile, FaFolder } from "react-icons/fa";
 import NameInput from "@/components/Files/NameInput";
 import { getFileIcon } from "@/components/Files/utils";
 

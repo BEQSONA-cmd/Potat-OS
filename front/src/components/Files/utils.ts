@@ -14,6 +14,7 @@ import {
   FaCuttlefish,
   FaCss3Alt,
   FaDocker,
+  FaUser,
 } from "react-icons/fa";
 import {
   SiCplusplus,
@@ -172,6 +173,8 @@ export function getFileIcon(file: I_File): IconType {
       return ImTerminal;
     case "firefox":
       return FaFirefoxBrowser;
+    case "profile":
+      return FaUser;
     default:
       return FaFile;
   }
