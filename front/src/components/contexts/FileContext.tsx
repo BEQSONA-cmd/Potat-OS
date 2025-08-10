@@ -3,30 +3,11 @@
 import { createContext, useContext, useState, ReactNode, useEffect } from "react";
 import { I_Point, useWindows } from "./WindowContext";
 import axios from "axios";
-import { FaDesktop, FaFile, FaFirefoxBrowser, FaFolder } from "react-icons/fa";
-import { ImTerminal } from "react-icons/im";
-import { IconType } from "react-icons";
+import { useDockApps } from "./DockContext";
 
 const HOST = process.env.NEXT_PUBLIC_HOST || "http://localhost:8080";
 
 export type FileType = "file" | "directory" | "settings" | "terminal" | "firefox";
-
-export function getFileIcon(type: FileType): IconType {
-    switch (type) {
-        case "file":
-            return FaFile;
-        case "directory":
-            return FaFolder;
-        case "settings":
-            return FaDesktop;
-        case "terminal":
-            return ImTerminal;
-        case "firefox":
-            return FaFirefoxBrowser;
-        default:
-            return FaFile;
-    }
-}
 
 export type ContentType = string | I_File[];
 
@@ -94,7 +75,22 @@ function changeFilePosition(file: I_File, position: I_Point): I_File {
     };
 }
 
-const defaultFiles: I_File[] = [];
+const defaultFiles: I_File[] = [
+    {
+        id: "terminalId",
+        name: "Terminal",
+        type: "terminal",
+        position: { x: 10, y: 550 },
+        content: "",
+    },
+    {
+        id: "firefoxId",
+        name: "Firefox",
+        type: "firefox",
+        position: { x: 10, y: 650 },
+        content: "",
+    },
+];
 
 export const FilesProvider = ({ children }: { children: ReactNode }) => {
     const [files, setFiles] = useState<I_File[] | null>(defaultFiles);
@@ -103,7 +99,9 @@ export const FilesProvider = ({ children }: { children: ReactNode }) => {
     const [fileCount, setFileCount] = useState(0);
     const [folderCount, setFolderCount] = useState(0);
     const [hoveredDirectoryId, setHoveredDirectoryId] = useState("");
-    const { windows, openWindow, closeWindow, findWindowId, fileUpdate } = useWindows();
+    const { setCurrentAppName } = useDockApps();
+    
+    const { openWindow, closeWindow, maximizeWindow, findWindowId, fileUpdate } = useWindows();
 
     const addFile = (file: I_File) => {
         setFiles((prevFiles) => [...(prevFiles || []), file]);
@@ -209,7 +207,12 @@ export const FilesProvider = ({ children }: { children: ReactNode }) => {
     const openFile = (id: string) => {
         const fileToOpen = findFile(id);
         if (!fileToOpen) return;
-        if (windows && windows.some((w) => w.file.id === id)) return;
+        if(findWindowId(fileToOpen.id)) {
+            setCurrentAppName(fileToOpen.name);
+            maximizeWindow(fileToOpen.id);
+            setCurrentFileId(fileToOpen.id);
+            return;
+        }
         openWindow(fileToOpen, fileToOpen.position);
     };
 

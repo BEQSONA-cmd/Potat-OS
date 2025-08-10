@@ -6,9 +6,10 @@ import { useContextMenu } from "../../components/contexts/ContextMenuContext";
 import { I_File, useFiles } from "../../components/contexts/FileContext";
 import { I_Point } from "../../components/contexts/WindowContext";
 import NameInput from "@/components/Files/NameInput";
-import { getCloseDirectory } from "@/components/Files/utils";
+import { getCloseDirectory, getFileIcon } from "@/components/Files/utils";
 
 function File({ file }: { file: I_File }) {
+    const Icon = getFileIcon(file);
     const {
         setHoveredDirectoryId,
         updateFileContent,
@@ -87,13 +88,14 @@ function File({ file }: { file: I_File }) {
         >
             {file.type === "directory" ? (
                 file.id === hoveredDirectoryId ? (
-                    <FaFolder size={40} className="text-orange-500 animate-pulse" />
+                    <Icon size={40} className="text-white animate-pulse" />
                 ) : (
-                    <FaFolder size={40} className="text-yellow-500 transition-colors" />
+                    <Icon size={40} className="text-white transition-colors" />
                 )
             ) : (
-                <FaFile size={40} className="text-blue-500 transition-colors" />
+                <Icon size={40} className="text-white transition-colors" />
             )}
+
             {editFileId === file.id ? (
                 <NameInput file={file} />
             ) : (

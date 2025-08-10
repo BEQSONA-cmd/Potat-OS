@@ -1,11 +1,9 @@
 "use client";
 
 import { createContext, useContext, useState, ReactNode } from "react";
-import { getFileIcon, I_File } from "./FileContext";
+import {  I_File } from "./FileContext";
 import { useDockApps } from "./DockContext";
-import { FaFile, FaFolder, FaDesktop, FaFirefoxBrowser } from "react-icons/fa";
-import { ImTerminal } from "react-icons/im";
-import { IconType } from "react-icons";
+import { getFileIcon } from "../Files/utils";
 
 export interface I_Point {
     x: number;
@@ -38,37 +36,8 @@ interface WindowsContextType {
 
 const WindowsContext = createContext<WindowsContextType | undefined>(undefined);
 
-const defaultWindows: I_Window[] = [
-    {
-        id: "terminalId",
-        file: {
-            id: crypto.randomUUID(),
-            name: "Terminal",
-            type: "terminal",
-            position: { x: 100, y: 100 },
-            content: "",
-        },
-        position: { x: 100, y: 100 },
-        size: { x: 600, y: 500 },
-        minimized: true,
-    },
-    {
-        id: "firefoxId",
-        file: {
-            id: crypto.randomUUID(),
-            name: "Firefox",
-            type: "firefox",
-            position: { x: 100, y: 100 },
-            content: "",
-        },
-        position: { x: 100, y: 100 },
-        size: { x: 600, y: 500 },
-        minimized: true,
-    },
-];
-
 export const WindowsProvider = ({ children }: { children: ReactNode }) => {
-    const [windows, setWindows] = useState<I_Window[]>(defaultWindows.length > 0 ? defaultWindows : []);
+    const [windows, setWindows] = useState<I_Window[]>([]);
     const [currentFileId, setCurrentFileId] = useState<string | null>(null);
     const { addDockApp, removeDockApp, setCurrentAppName } = useDockApps();
 
@@ -83,7 +52,7 @@ export const WindowsProvider = ({ children }: { children: ReactNode }) => {
 
     const openWindow = (file: I_File, position: I_Point) => {
         const newWindow: I_Window = {
-            id: crypto.randomUUID(),
+            id: file.id,
             file,
             position,
             size: { x: 600, y: 500 },
@@ -91,12 +60,15 @@ export const WindowsProvider = ({ children }: { children: ReactNode }) => {
         };
         setCurrentFileId(newWindow.id);
         setWindows((prev) => [...prev, newWindow]);
-
+        if (file.type === "terminal" || file.type === "firefox") {
+            setCurrentAppName(file.name);
+            return;
+        }
         addDockApp({
             isDefault: false,
             id: newWindow.id,
             name: file.name,
-            icon: getFileIcon(file.type),
+            icon: getFileIcon(file),
         });
         setCurrentAppName(file.name);
     };

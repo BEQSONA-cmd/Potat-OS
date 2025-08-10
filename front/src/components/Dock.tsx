@@ -1,17 +1,15 @@
 import { TbGridDots } from "react-icons/tb";
 import { I_DockApp, useDockApps } from "./contexts/DockContext";
-import { useWindows } from "./contexts/WindowContext";
 import { IconType } from "react-icons";
+import { useFiles } from "./contexts/FileContext";
 
 function AppCard({ app }: { app: I_DockApp }) {
-    const { currentAppName, setCurrentAppName } = useDockApps();
-    const { maximizeWindow, setCurrentFileId } = useWindows();
+    const { currentAppName } = useDockApps();
+    const { openFile } = useFiles();
     const Icon: IconType = app.icon;
 
     const handleClick = () => {
-        setCurrentAppName(app.name);
-        maximizeWindow(app.id);
-        setCurrentFileId(app.id);
+        openFile(app.id);
     };
 
     return (
