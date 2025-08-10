@@ -8,14 +8,14 @@ function FileInDirectory({ file }: { file: I_File }) {
     function onDoubleClick(e: React.MouseEvent, file: I_File) {
         openFile(file.id);
     }
-    const Icon = getFileIcon(file);
+    const { icon: Icon, color } = getFileIcon(file);
     return (
         <div key={file.id} className="flex flex-col items-center justify-center w-full">
             <div
                 onDoubleClick={(e) => onDoubleClick(e, file)}
                 className="text-xs font-medium text-white group flex flex-col items-center w-full cursor-pointer p-2 hover:bg-gray-700 rounded transition-colors"
             >
-            <Icon size={40} className="text-white transition-colors" />
+            <Icon size={40} className="text-white transition-colors" style={{ color }} />
                 {editFileId === file.id ? (
                     <NameInput file={file} />
                 ) : (

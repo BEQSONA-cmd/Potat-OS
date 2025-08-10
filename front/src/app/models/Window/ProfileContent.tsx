@@ -14,11 +14,11 @@ import {
   FaGithub,
   FaGitlab,
   FaAws,
-  FaCloud,
   FaCloudversify,
 } from "react-icons/fa";
-import { SiTypescript, SiNextdotjs, SiNestjs, SiFastapi, SiMongodb, SiPostgresql, SiMysql, SiSqlite, SiExpress, SiFlask, SiSpringboot, SiOracle, SiGooglecloud, SiNginx, SiFastify, SiReact, SiElectron, SiGnubash, SiCplusplus, SiC } from "react-icons/si";
+import { SiTypescript, SiNextdotjs, SiNestjs, SiFastapi, SiMongodb, SiPostgresql, SiMysql, SiSqlite, SiExpress, SiFlask, SiSpring, SiOracle, SiGooglecloud, SiNginx, SiFastify, SiReact, SiElectron, SiGnubash, SiCplusplus, SiC } from "react-icons/si";
 import { IconType } from "react-icons";
+import { VscAzure } from "react-icons/vsc";
 
 const user = {
   name: "Beqa",
@@ -59,13 +59,13 @@ const frameworks: I_Skills[] = [
   { name: "Flask", level: 60, color: "#000000", icon: SiFlask },
   { name: "Http Server", level: 60, color: "#888888", icon: FaCloudversify },
   { name: "FastAPI", level: 50, color: "#009688", icon: SiFastapi },
-  { name: "Spring Boot", level: 70, color: "#6DB33F", icon: SiSpringboot },
+  { name: "Spring Boot", level: 70, color: "#6DB33F", icon: SiSpring },
 ];
 
 // Databases
 const databases: I_Skills[] = [
   { name: "MySQL", level: 90, color: "#4479A1", icon: SiMysql },
-  { name: "SQLite", level: 90, color: "#003B57", icon: SiSqlite },
+  { name: "SQLite", level: 90, color: "#4479A1", icon: SiSqlite },
   { name: "PostgreSQL", level: 80, color: "#336791", icon: SiPostgresql },
   { name: "MongoDB", level: 70, color: "#47A248", icon: SiMongodb },
 ];
@@ -74,7 +74,7 @@ const databases: I_Skills[] = [
 const devOPS: I_Skills[] = [
   { name: "AWS", level: 90, color: "#FF9900", icon: FaAws },
   { name: "Oracle Cloud", level: 85, color: "#F80000", icon: SiOracle },
-  { name: "Azure", level: 70, color: "#0078D4", icon: FaCloud },
+  { name: "Azure", level: 70, color: "#0078D4", icon: VscAzure },
   { name: "Google Cloud", level: 75, color: "#4285F4", icon: SiGooglecloud },
   { name: "Docker", level: 85, color: "#0db7ed", icon: FaDocker },
   { name: "Linux", level: 95, color: "#FCC624", icon: FaLinux },

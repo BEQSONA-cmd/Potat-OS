@@ -4,12 +4,14 @@ import { createContext, useContext, useState, ReactNode } from "react";
 import { IconType } from "react-icons";
 import { FaFirefoxBrowser } from "react-icons/fa";
 import { ImTerminal } from "react-icons/im";
+import { FileIcon } from "../Files/utils";
+
 
 export interface I_DockApp {
     isDefault: boolean;
     id: string;
     name: string;
-    icon: IconType;
+    icon: FileIcon;
 }
 
 interface DockAppsContextType {
@@ -29,13 +31,19 @@ export const DockAppsProvider = ({ children }: { children: ReactNode }) => {
             isDefault: true,
             id: "firefoxId",
             name: "Firefox",
-            icon: FaFirefoxBrowser,
+            icon: {
+                icon: FaFirefoxBrowser,
+                color: "#FF6600",
+            },
         },
         {
             isDefault: true,
             id: "terminalId",
             name: "Terminal",
-            icon: ImTerminal,
+            icon: {
+                icon: ImTerminal,
+                color: "#FF6600",
+            },
         },
     ]);
     const [currentAppName, setCurrentAppName] = useState<string | null>(null);

@@ -6,7 +6,7 @@ import { useFiles } from "./contexts/FileContext";
 function AppCard({ app }: { app: I_DockApp }) {
     const { currentAppName } = useDockApps();
     const { openFile } = useFiles();
-    const Icon: IconType = app.icon;
+    const Icon = app.icon.icon;
 
     const handleClick = () => {
         openFile(app.id);
@@ -24,7 +24,7 @@ function AppCard({ app }: { app: I_DockApp }) {
                 }`}
                 onClick={handleClick}
             >
-                <Icon className="text-white" size={30} />
+                <Icon className="text-white" size={30} style={{ color: app.icon.color }} />
             </button>
             <span className="opacity-0 group-hover:opacity-100 transition-opacity text-xs mb-3 bg-black bg-opacity-80 px-2 py-0.5 rounded border border-gray-400 absolute -translate-y-7">
                 {app.name}
@@ -47,7 +47,10 @@ export default function Dock() {
                     isDefault: true,
                     id: "apps-menu",
                     name: "Apps",
-                    icon: TbGridDots,
+                    icon: {
+                        icon: TbGridDots,
+                        color: "white",
+                    },
                 }}
             />
         </div>

@@ -9,7 +9,7 @@ import NameInput from "@/components/Files/NameInput";
 import { getCloseDirectory, getFileIcon } from "@/components/Files/utils";
 
 function File({ file }: { file: I_File }) {
-    const Icon = getFileIcon(file);
+    const { icon: Icon, color } = getFileIcon(file);
     const {
         setHoveredDirectoryId,
         updateFileContent,
@@ -88,12 +88,12 @@ function File({ file }: { file: I_File }) {
         >
             {file.type === "directory" ? (
                 file.id === hoveredDirectoryId ? (
-                    <Icon size={40} className="text-white animate-pulse" />
+                    <Icon size={40} className="text-white animate-pulse" style={{ color }} />
                 ) : (
-                    <Icon size={40} className="text-white transition-colors" />
+                    <Icon size={40} className="text-white transition-colors" style={{ color }} />
                 )
             ) : (
-                <Icon size={40} className="text-white transition-colors" />
+                <Icon size={40} className="text-white transition-colors" style={{ color }} />
             )}
 
             {editFileId === file.id ? (

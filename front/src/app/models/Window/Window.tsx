@@ -28,7 +28,7 @@ export default function Window({ fileWindow }: WindowProps) {
   const resizeHandleRef = useRef<HTMLDivElement>(null);
   const { minimizeWindow, closeWindow, setCurrentWindow, currentFileId } =
     useWindows();
-  const Icon = getFileIcon(fileWindow.file);
+  const { icon: Icon, color } = getFileIcon(fileWindow.file);
   const onClose = () => {
     closeWindow(fileWindow.id);
   };
@@ -142,7 +142,7 @@ export default function Window({ fileWindow }: WindowProps) {
         className="flex items-center justify-between bg-gray-700 p-2 rounded-t-md cursor-move"
       >
         <div className="flex items-center gap-2">
-          <Icon className="text-white" size={20} />
+          <Icon className="text-white" size={20} style={{ color }} />
           <h3 className="text-white font-medium">{fileWindow.file.name}</h3>
         </div>
         <div className="flex items-center gap-3 ml-auto">
