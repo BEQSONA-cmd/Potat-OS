@@ -23,6 +23,7 @@ import {
   SiTypescript,
   SiGnubash,
   SiPhp,
+  SiC,
 } from "react-icons/si";
 import { ImTerminal } from "react-icons/im";
 import { IconType } from "react-icons";
@@ -128,7 +129,7 @@ function getFileStyleIcon(filename: string): IconType {
       case "html":
         return FaHtml5;
       case "c":
-        return FaCuttlefish;
+        return SiC;
       case "cpp":
         return SiCplusplus;
       case "python":
