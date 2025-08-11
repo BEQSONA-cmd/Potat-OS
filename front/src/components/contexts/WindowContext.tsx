@@ -51,11 +51,13 @@ export const WindowsProvider = ({ children }: { children: ReactNode }) => {
     };
 
     const openWindow = (file: I_File, position: I_Point) => {
+        // if(position.y > 500)
+        //     position.y = 500;
         const newWindow: I_Window = {
             id: file.id,
             file,
             position,
-            size: { x: 600, y: 500 },
+            size: { x: 700, y: 500 },
             minimized: false,
         };
         setCurrentFileId(newWindow.id);
