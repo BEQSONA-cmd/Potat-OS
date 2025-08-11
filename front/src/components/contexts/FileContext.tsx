@@ -65,55 +65,26 @@ async function getRepo({ repoName }: getRepoParams) {
 
 const repoNames = ["Potat-OS", "Cabinette", "Minishell_Tester", "RayCaster", "Arduino"];
 
-function changeFilePosition(file: I_File, position: I_Point): I_File {
-    return {
-        ...file,
-        position: {
-            x: position.x + (file.position?.x || 0),
-            y: position.y + (file.position?.y || 0),
-        },
-    };
-}
-
-const socials = [
-  {
-    name: "GitHub",
-    url: "https://github.com/BEQSONA-cmd"
-  },
-  {
-    name: "LinkedIn",
-    url: "https://www.linkedin.com/in/beqa-tvildiani-8a6b21276/"
-  },
-  {
-    name: "Email",
-    url: "tvildiani2001@gmail.com"
-  },
-  {
-    name: "Portfolio",
-    url: "https://beqa.live"
-  }
-];
-
-const defaultFiles: I_File[] = [
-    {
-        id: "terminalId",
-        name: "Terminal",
-        type: "terminal",
-        position: { x: 10, y: 550 },
-        content: "",
-    },
+let defaultFiles: I_File[] = [
     {
         id: "firefoxId",
         name: "Firefox",
         type: "firefox",
-        position: { x: 10, y: 650 },
+        position: { x: 10, y: 50 },
         content: "",
     },
     {
         id: "profileId",
         name: "Profile",
         type: "profile",
-        position: { x: 10, y: 750 },
+        position: { x: 10, y: 150 },
+        content: "",
+    },
+    {
+        id: "terminalId",
+        name: "Terminal",
+        type: "terminal",
+        position: { x: 10, y: 250 },
         content: "",
     },
 ];
@@ -126,26 +97,31 @@ export const FilesProvider = ({ children }: { children: ReactNode }) => {
     const [folderCount, setFolderCount] = useState(0);
     const [hoveredDirectoryId, setHoveredDirectoryId] = useState("");
     const { setCurrentAppName } = useDockApps();
-    
-    const { openWindow, closeWindow, maximizeWindow, findWindowId, fileUpdate } = useWindows();
+
+    const { openWindow, setCurrentWindow, closeWindow, maximizeWindow, findWindowId, fileUpdate } = useWindows();
 
     const addFile = (file: I_File) => {
         setFiles((prevFiles) => [...(prevFiles || []), file]);
     };
 
-    useEffect(() => {
-        (async () => {
-            let prevPosition = { x: 0, y: 0 };
-            for (const name of repoNames) {
-                const file = await getRepo({ repoName: name });
-                if (file) {
-                    const finalFile = changeFilePosition(file, prevPosition);
-                    addFile(finalFile);
-                }
-                prevPosition = { x: prevPosition.x, y: prevPosition.y + 100 };
-            }
-        })();
-    }, []);
+    // useEffect(() => {
+    //     (async () => {
+    //         const ProjectsFile: I_File = {
+    //             id: "projectsId",
+    //             name: "Projects",
+    //             type: "directory",
+    //             position: { x: 10, y: 350 },
+    //             content: [],
+    //         };
+    //         for (const name of repoNames) {
+    //             const file = await getRepo({ repoName: name });
+    //             if (file && Array.isArray(ProjectsFile.content)) {
+    //                 ProjectsFile.content.push(file);
+    //             }
+    //         }
+    //         addFile(ProjectsFile);
+    //     })();
+    // }, []);
 
     function findFile(id: string, searchFiles?: I_File[]): I_File | undefined {
         const filesToSearch = searchFiles || files;
@@ -233,13 +209,14 @@ export const FilesProvider = ({ children }: { children: ReactNode }) => {
     const openFile = (id: string) => {
         const fileToOpen = findFile(id);
         if (!fileToOpen) return;
-        if(findWindowId(fileToOpen.id)) {
+        if (findWindowId(fileToOpen.id)) {
             setCurrentAppName(fileToOpen.name);
             maximizeWindow(fileToOpen.id);
+            setCurrentWindow(fileToOpen.id);
             setCurrentFileId(fileToOpen.id);
             return;
         }
-        openWindow(fileToOpen, fileToOpen.position);
+        openWindow(fileToOpen);
     };
 
     return (

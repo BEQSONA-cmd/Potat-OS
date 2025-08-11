@@ -17,7 +17,7 @@ export function ContextMenu({ context }: { context: IContextMenu }) {
             position,
             content: "",
         };
-        openWindow(file, position);
+        openWindow(file);
     };
 
     const addNewFile = (position: I_Point) => {

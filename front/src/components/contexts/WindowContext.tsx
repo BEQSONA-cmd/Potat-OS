@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState, ReactNode } from "react";
-import {  I_File } from "./FileContext";
+import { I_File } from "./FileContext";
 import { useDockApps } from "./DockContext";
 import { getFileIcon } from "../Files/utils";
 
@@ -26,7 +26,7 @@ interface WindowsContextType {
     setCurrentWindow: (id: string | null) => void;
     minimizeWindow: (id: string) => void;
     maximizeWindow: (id: string) => void;
-    openWindow: (file: I_File, position: I_Point) => void;
+    openWindow: (file: I_File) => void;
     updateWindowPosition: (windowId: string, position: I_Point) => void;
     updateWindowSize: (windowId: string, size: I_Point) => void;
     closeWindow: (id: string) => void;
@@ -50,9 +50,12 @@ export const WindowsProvider = ({ children }: { children: ReactNode }) => {
         }
     };
 
-    const openWindow = (file: I_File, position: I_Point) => {
-        // if(position.y > 500)
-        //     position.y = 500;
+    const openWindow = (file: I_File) => {
+        const position: I_Point = {
+            x: 100 + Math.random() * 100,
+            y: 100 + Math.random() * 100,
+        };
+
         const newWindow: I_Window = {
             id: file.id,
             file,
