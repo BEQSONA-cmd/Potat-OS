@@ -66,8 +66,8 @@ async function fetchRepoContents(repoName: string, path: string = ""): Promise<I
         const contents: I_File[] = await Promise.all(
             response.data.map(async (item: any, index: number) => {
                 const newPosition = {
-                    x: 0,
-                    y: 0,
+                    x: 50,
+                    y: 50,
                 };
 
                 if (item.type === "dir") {

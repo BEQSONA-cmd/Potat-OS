@@ -1,4 +1,3 @@
-import { FaDesktop, FaFile, FaFolder } from "react-icons/fa";
 import { IContextMenu } from "../../components/contexts/ContextMenuContext";
 import { I_File, useFiles } from "../../components/contexts/FileContext";
 import { I_Point, useWindows } from "../../components/contexts/WindowContext";

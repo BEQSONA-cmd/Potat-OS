@@ -104,24 +104,24 @@ export const FilesProvider = ({ children }: { children: ReactNode }) => {
         setFiles((prevFiles) => [...(prevFiles || []), file]);
     };
 
-    // useEffect(() => {
-    //     (async () => {
-    //         const ProjectsFile: I_File = {
-    //             id: "projectsId",
-    //             name: "Projects",
-    //             type: "directory",
-    //             position: { x: 10, y: 350 },
-    //             content: [],
-    //         };
-    //         for (const name of repoNames) {
-    //             const file = await getRepo({ repoName: name });
-    //             if (file && Array.isArray(ProjectsFile.content)) {
-    //                 ProjectsFile.content.push(file);
-    //             }
-    //         }
-    //         addFile(ProjectsFile);
-    //     })();
-    // }, []);
+    useEffect(() => {
+        (async () => {
+            const ProjectsFile: I_File = {
+                id: "projectsId",
+                name: "Projects",
+                type: "directory",
+                position: { x: 10, y: 350 },
+                content: [],
+            };
+            for (const name of repoNames) {
+                const file = await getRepo({ repoName: name });
+                if (file && Array.isArray(ProjectsFile.content)) {
+                    ProjectsFile.content.push(file);
+                }
+            }
+            addFile(ProjectsFile);
+        })();
+    }, []);
 
     function findFile(id: string, searchFiles?: I_File[]): I_File | undefined {
         const filesToSearch = searchFiles || files;
