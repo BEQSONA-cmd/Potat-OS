@@ -5,6 +5,7 @@ import TerminalContent from "./TerminalContent";
 import ProfileContent from "./ProfileContent";
 import FirefoxContent from "./FirefoxContent";
 import { DirectoryContent } from "./DirectoryContent";
+import ProjectContent from "./ProjectContent";
 
 export default function WindowContent({ file }: { file: I_File }) {
     switch (file.type) {
@@ -16,6 +17,8 @@ export default function WindowContent({ file }: { file: I_File }) {
             return <TerminalContent />;
         case "profile":
             return <ProfileContent />;
+        case "project":
+            return <ProjectContent />;
         case "firefox":
             return <FirefoxContent />;
         default:

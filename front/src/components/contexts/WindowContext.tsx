@@ -56,11 +56,15 @@ export const WindowsProvider = ({ children }: { children: ReactNode }) => {
         const screenWidth = typeof window !== "undefined" ? window.innerWidth : 1024;
         const screenHeight = typeof window !== "undefined" ? window.innerHeight : 768;
 
-        const defaultWidth = Math.min(700, screenWidth * 0.9);
-        const defaultHeight = Math.min(500, screenHeight * 0.8);
+        const defaultWidth = Math.min(800, screenWidth * 0.9);
+        const defaultHeight = Math.min(600, screenHeight * 0.8);
+        const angle = Math.random() * 2 * Math.PI;
+        const radius = Math.random() * 100;
+        const centerX = (screenWidth - defaultWidth) / 2;
+        const centerY = (screenHeight - defaultHeight) / 2;
         const position: I_Point = {
-            x: Math.max(10, (screenWidth - defaultWidth) / 2),
-            y: Math.max(10, (screenHeight - defaultHeight) / 2),
+            x: Math.max(10, centerX + radius * Math.cos(angle)),
+            y: Math.max(10, centerY + radius * Math.sin(angle)),
         };
 
         const newWindow: I_Window = {

@@ -7,7 +7,7 @@ import { useDockApps } from "./DockContext";
 
 const HOST = process.env.NEXT_PUBLIC_HOST || "http://localhost:8080";
 
-export type FileType = "file" | "directory" | "settings" | "terminal" | "firefox" | "profile";
+export type FileType = "file" | "directory" | "settings" | "terminal" | "firefox" | "profile" | "project";
 
 export type ContentType = string | I_File[];
 
@@ -70,21 +70,21 @@ let defaultFiles: I_File[] = [
         id: "firefoxId",
         name: "Firefox",
         type: "firefox",
-        position: { x: 10, y: 50 },
+        position: { x: 10, y: 20 },
         content: "",
     },
     {
         id: "profileId",
         name: "Profile",
         type: "profile",
-        position: { x: 10, y: 150 },
+        position: { x: 10, y: 120 },
         content: "",
     },
     {
         id: "terminalId",
         name: "Terminal",
         type: "terminal",
-        position: { x: 10, y: 250 },
+        position: { x: 10, y: 220 },
         content: "",
     },
 ];
@@ -110,13 +110,13 @@ export const FilesProvider = ({ children }: { children: ReactNode }) => {
                 id: "projectsId",
                 name: "Projects",
                 type: "directory",
-                position: { x: 10, y: 350 },
+                position: { x: 10, y: 320 },
                 content: [],
             };
             for (const name of repoNames) {
                 const file = await getRepo({ repoName: name });
                 if (file && Array.isArray(ProjectsFile.content)) {
-                    ProjectsFile.content.push(file);
+                    ProjectsFile.content.push({ ...file, id: name });
                 }
             }
             addFile(ProjectsFile);
@@ -217,6 +217,17 @@ export const FilesProvider = ({ children }: { children: ReactNode }) => {
             return;
         }
         openWindow(fileToOpen);
+        console.log(fileToOpen.id);
+        if (repoNames.includes(fileToOpen.id)) {
+            const projectFile: I_File = {
+                id: `project-${fileToOpen.id}`,
+                name: `${fileToOpen.id}.info`,
+                type: "project",
+                content: "",
+                position: { x: 0, y: 0 },
+            };
+            openWindow(projectFile);
+        }
     };
 
     return (

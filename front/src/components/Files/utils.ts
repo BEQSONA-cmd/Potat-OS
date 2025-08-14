@@ -14,6 +14,7 @@ import {
     FaCss3Alt,
     FaDocker,
     FaUser,
+    FaInfoCircle,
 } from "react-icons/fa";
 import { SiCplusplus, SiJson, SiTypescript, SiGnubash, SiPhp, SiC } from "react-icons/si";
 
@@ -173,6 +174,8 @@ export function getFileIcon(file: I_File): FileIcon {
             return { icon: FaFirefoxBrowser, color: "#FF6600" };
         case "profile":
             return { icon: FaUser, color: "#1E90FF" };
+        case "project":
+            return { icon: FaInfoCircle, color: "#1E90FF" };
         default:
             return { icon: FaFile, color: "#1E90FF" };
     }

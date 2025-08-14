@@ -105,13 +105,3 @@ export const skills: allSkills = {
     databases: databases,
     devOps: devOPS,
 };
-
-interface Project {
-    name: string;
-    description: string;
-    howItWorks: string;
-    whatILearn: string;
-    exampleUrl: string;
-    languages: string[];
-    technologies: string[];
-}

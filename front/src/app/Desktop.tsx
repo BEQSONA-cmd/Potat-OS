@@ -50,12 +50,8 @@ export default function Desktop() {
 
     return (
         <div
-            ref={desktopRef}
             className="w-screen h-screen relative overflow-hidden text-white select-none overflow-x-hidden"
             onContextMenu={openContextMenu}
-            onMouseDown={handleMouseDown}
-            onMouseMove={handleMouseMove}
-            onMouseUp={handleMouseUp}
             onClick={() => setContextMenu(null)}
         >
             <div className="absolute inset-0 w-full h-full z-0 pointer-events-none">
@@ -63,11 +59,21 @@ export default function Desktop() {
             </div>
             {/* Top Nav Bar */}
             <Navbar />
+            <div
+            ref={desktopRef}
 
-            {/* Files and Open Windows */}
-            <Files />
-            {windows && windows.map((window) => <Window key={window.id} fileWindow={window} />)}
+                className="relative w-full h-full mt-8"
+                onMouseDown={handleMouseDown}
+                onMouseMove={handleMouseMove}
+                onMouseUp={handleMouseUp}
+            >
+                {/* Files and Open Windows */}
+                <Files />
+                {windows && windows.map((window) => <Window key={window.id} fileWindow={window} />)}
 
+                {/* Context Menu */}
+                {contextMenu && contextMenu.show && <ContextMenu context={contextMenu} />}
+            </div>
             {/* Selection Rectangle */}
             {isSelecting && (
                 <div
@@ -75,10 +81,6 @@ export default function Desktop() {
                     style={selectionStyle}
                 />
             )}
-
-            {/* Context Menu */}
-            {contextMenu && contextMenu.show && <ContextMenu context={contextMenu} />}
-
             {/* Bottom Dock */}
             <Dock />
         </div>

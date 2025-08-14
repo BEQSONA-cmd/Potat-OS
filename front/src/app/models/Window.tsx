@@ -98,7 +98,7 @@ export default function Window({ fileWindow }: WindowProps) {
               left: 0,
               top: 0,
               width: "100vw",
-              height: "100vh",
+              height: "100%",
               zIndex: 100,
           }
         : {
@@ -113,7 +113,7 @@ export default function Window({ fileWindow }: WindowProps) {
         <div
             ref={windowRef}
             onClick={() => setCurrentWindow(id)}
-            className="absolute bg-gray-800 rounded-md shadow-lg flex flex-col border border-gray-700 resize-container"
+            className="absolute bg-gray-800 rounded-md shadow-lg flex flex-col border border-gray-900 resize-container"
             style={{
                 ...windowStyle,
                 minWidth: "300px",
