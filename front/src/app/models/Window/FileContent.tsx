@@ -10,6 +10,7 @@ import "github-markdown-css";
 const CodeBlock = ({ language, value }: { language: string | null; value: string }) => {
     return (
         <SyntaxHighlighter
+            className="h-full w-full"
             language={language || "text"}
             style={atomDark}
             showLineNumbers={true}
@@ -94,11 +95,11 @@ export function FileContent({ file }: { file: I_File }) {
     }
 
     return (
-        <div onDoubleClick={handleDoubleClick} className=" h-full w-full">
+        <div onDoubleClick={handleDoubleClick} className="h-full w-full">
             {isEditing ? (
                 <textarea
                     ref={textareaRef}
-                    className="w-full h-full bg-gray-700 text-white p-4 rounded focus:outline-none font-mono"
+                    className="w-full h-full bg-gray-900 text-white p-4 rounded focus:outline-none font-mono"
                     value={content}
                     onChange={(e) => setContent(e.target.value)}
                     onKeyDown={(e) => {

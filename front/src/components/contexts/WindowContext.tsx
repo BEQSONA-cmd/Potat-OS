@@ -16,6 +16,7 @@ export interface I_Window {
     position: I_Point;
     size: I_Point;
     minimized: boolean;
+    fullscreen: boolean;
 }
 
 interface WindowsContextType {
@@ -26,6 +27,7 @@ interface WindowsContextType {
     setCurrentWindow: (id: string | null) => void;
     minimizeWindow: (id: string) => void;
     maximizeWindow: (id: string) => void;
+    fullscreenWindow: (id: string) => void;
     openWindow: (file: I_File) => void;
     updateWindowPosition: (windowId: string, position: I_Point) => void;
     updateWindowSize: (windowId: string, size: I_Point) => void;
@@ -51,24 +53,33 @@ export const WindowsProvider = ({ children }: { children: ReactNode }) => {
     };
 
     const openWindow = (file: I_File) => {
+        const screenWidth = typeof window !== "undefined" ? window.innerWidth : 1024;
+        const screenHeight = typeof window !== "undefined" ? window.innerHeight : 768;
+
+        const defaultWidth = Math.min(700, screenWidth * 0.9);
+        const defaultHeight = Math.min(500, screenHeight * 0.8);
         const position: I_Point = {
-            x: 100 + Math.random() * 100,
-            y: 100 + Math.random() * 100,
+            x: Math.max(10, (screenWidth - defaultWidth) / 2),
+            y: Math.max(10, (screenHeight - defaultHeight) / 2),
         };
 
         const newWindow: I_Window = {
             id: file.id,
             file,
             position,
-            size: { x: 700, y: 500 },
+            size: { x: defaultWidth, y: defaultHeight },
             minimized: false,
+            fullscreen: false,
         };
+
         setCurrentFileId(newWindow.id);
         setWindows((prev) => [...prev, newWindow]);
+
         if (file.type === "terminal" || file.type === "firefox") {
             setCurrentAppName(file.name);
             return;
         }
+
         addDockApp({
             isDefault: false,
             id: newWindow.id,
@@ -108,6 +119,10 @@ export const WindowsProvider = ({ children }: { children: ReactNode }) => {
         setWindows((prev) => prev.map((w) => (w.id === id ? { ...w, minimized: false } : w)));
     };
 
+    const fullscreenWindow = (id: string) => {
+        setWindows((prev) => prev.map((w) => (w.id === id ? { ...w, fullscreen: !w.fullscreen } : w)));
+    };
+
     const findWindowId = (fileId: string): string | undefined => {
         const window = windows.find((w) => w.file.id === fileId);
         return window ? window.id : undefined;
@@ -132,6 +147,7 @@ export const WindowsProvider = ({ children }: { children: ReactNode }) => {
                 updateWindowSize,
                 closeWindow,
                 minimizeWindow,
+                fullscreenWindow,
                 maximizeWindow,
                 fileUpdate,
                 findWindowId,

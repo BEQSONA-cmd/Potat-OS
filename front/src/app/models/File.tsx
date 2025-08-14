@@ -115,7 +115,7 @@ function File({ file, opened }: { file: I_File; opened: boolean }) {
 
 export default function Files() {
     const { setEditFileId, currentFileId, files } = useFiles();
-    const opened = [""];
+    const opened = ["profileId"];
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {

@@ -66,7 +66,6 @@ const frameworks: I_Skills[] = [
     { name: "Node.js", level: 91, color: "#68a063", icon: FaNodeJs },
     { name: "Express.js", level: 76, color: "#ffffff", icon: SiExpress },
     { name: "Fastify", level: 94, color: "#000000", icon: SiFastify },
-    { name: "NestJS", level: 71, color: "#E0234E", icon: SiNestjs },
     { name: "Flask", level: 61, color: "#000000", icon: SiFlask },
     { name: "Http Server", level: 61, color: "#888888", icon: FaCloudversify },
     { name: "FastAPI", level: 52, color: "#009688", icon: SiFastapi },
@@ -106,3 +105,13 @@ export const skills: allSkills = {
     databases: databases,
     devOps: devOPS,
 };
+
+interface Project {
+    name: string;
+    description: string;
+    howItWorks: string;
+    whatILearn: string;
+    exampleUrl: string;
+    languages: string[];
+    technologies: string[];
+}

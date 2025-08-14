@@ -63,7 +63,7 @@ async function getRepo({ repoName }: getRepoParams) {
     }
 }
 
-const repoNames = ["Potat-OS", "Cabinette", "Minishell_Tester", "RayCaster", "Arduino"];
+const repoNames = ["Minishell_Tester", "Cabinette", "Cub3d", "Minishell"];
 
 let defaultFiles: I_File[] = [
     {

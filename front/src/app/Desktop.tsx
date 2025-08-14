@@ -2,7 +2,7 @@
 
 import { useContextMenu } from "../components/contexts/ContextMenuContext";
 import { ContextMenu } from "./models/ContextMenu";
-import Window from "./models/Window/Window";
+import Window from "./models/Window";
 import { useWindows } from "../components/contexts/WindowContext";
 import Files from "./models/File";
 import Navbar from "@/components/Navbar";

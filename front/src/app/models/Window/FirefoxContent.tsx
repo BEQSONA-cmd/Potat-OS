@@ -1,6 +1,4 @@
 import React from "react";
-import { useStatic } from "@/lib/useStatic";
-import Image from "next/image";
 
 export default function FirefoxContent() {
     return (
