@@ -8,7 +8,7 @@ import { I_Point } from "../../components/contexts/WindowContext";
 import NameInput from "@/components/Files/NameInput";
 import { getCloseDirectory, getFileIcon } from "@/components/Files/utils";
 
-function File({ file }: { file: I_File }) {
+function File({ file, opened }: { file: I_File; opened: boolean }) {
     const { icon: Icon, color } = getFileIcon(file);
     const {
         setHoveredDirectoryId,
@@ -71,6 +71,12 @@ function File({ file }: { file: I_File }) {
         window.addEventListener("mouseup", onMouseUp);
     }
 
+    useEffect(() => {
+        if (opened) {
+            openFile(file.id);
+        }
+    }, [opened]);
+
     return (
         <div
             key={file.id}
@@ -109,6 +115,7 @@ function File({ file }: { file: I_File }) {
 
 export default function Files() {
     const { setEditFileId, currentFileId, files } = useFiles();
+    const opened = [""];
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -116,6 +123,7 @@ export default function Files() {
                 setEditFileId(currentFileId);
             }
         };
+
         window.addEventListener("keydown", handleKeyDown);
         return () => window.removeEventListener("keydown", handleKeyDown);
     }, [currentFileId]);
@@ -131,7 +139,7 @@ export default function Files() {
                             zIndex: file.id === currentFileId ? 10 : 1,
                         }}
                     >
-                        <File key={file.id} file={file} />
+                        <File key={file.id} file={file} opened={opened.includes(file.id)} />
                     </div>
                 ))}
         </div>
