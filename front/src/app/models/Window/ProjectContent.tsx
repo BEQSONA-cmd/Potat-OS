@@ -2,8 +2,13 @@ import React from "react";
 import { projects } from "@/components/Project/projects";
 import { FaGithub } from "react-icons/fa";
 
-export default function ProjectContent() {
-    const currentProject = projects[0]; // This would come from your router/state
+export default function ProjectContent({ fileName }: { fileName: string }) {
+    const baseFileName = fileName.split(".")[0];
+    const currentProject = projects.find((project) => project.name === baseFileName);
+
+    if (!currentProject) {
+        return <div>Project not found {fileName}</div>;
+    }
 
     return (
         <div className="h-full w-full bg-gray-900 text-white p-6 overflow-y-auto">

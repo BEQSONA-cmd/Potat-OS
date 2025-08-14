@@ -18,7 +18,7 @@ export default function WindowContent({ file }: { file: I_File }) {
         case "profile":
             return <ProfileContent />;
         case "project":
-            return <ProjectContent />;
+            return <ProjectContent fileName={file.name} />;
         case "firefox":
             return <FirefoxContent />;
         default:

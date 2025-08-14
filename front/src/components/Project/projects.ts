@@ -22,7 +22,7 @@ interface Project {
 }
 
 const MinishellTester: Project = {
-    name: "Minishell Tester",
+    name: "Minishell_Tester",
     description:
         "A tool to streamline testing for the 42 Minishell project by connecting two terminals and executing commands simultaneously in bash and your minishell.",
     howItWorks:
