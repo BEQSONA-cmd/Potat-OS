@@ -4,6 +4,7 @@ import { createContext, useContext, useState, ReactNode, useEffect } from "react
 import { I_Point, useWindows } from "./WindowContext";
 import axios from "axios";
 import { useDockApps } from "./DockContext";
+import { toast } from "react-toastify";
 
 const HOST = process.env.NEXT_PUBLIC_HOST || "http://localhost:8080";
 
@@ -63,9 +64,9 @@ async function getRepo({ repoName }: getRepoParams) {
     }
 }
 
-const repoNames = ["Minishell_Tester", "Cabinette", "Cub3d", "Minishell"];
+const repoNames = ["Minishell_Tester", "Cabinette", "Cub3d", "Minishell", "Tabley"];
 
-let defaultFiles: I_File[] = [
+const defaultFiles: I_File[] = [
     {
         id: "firefoxId",
         name: "Firefox",
@@ -119,6 +120,7 @@ export const FilesProvider = ({ children }: { children: ReactNode }) => {
                     ProjectsFile.content.push({ ...file, id: name });
                 }
             }
+
             addFile(ProjectsFile);
         })();
     }, []);
@@ -168,6 +170,11 @@ export const FilesProvider = ({ children }: { children: ReactNode }) => {
     };
 
     const deleteFile = (id: string) => {
+        if (id === "firefoxId" || id === "profileId" || id === "terminalId" || id === "projectsId") {
+            toast.error("You can't delete this file");
+            return;
+        }
+
         setFiles((prevFiles) => (prevFiles ? prevFiles.filter((file) => file.id !== id) : null));
         const windowId = findWindowId(id);
         closeWindow(windowId ? windowId : "");
@@ -217,16 +224,11 @@ export const FilesProvider = ({ children }: { children: ReactNode }) => {
             return;
         }
         openWindow(fileToOpen);
-        console.log(fileToOpen.id);
-        if (repoNames.includes(fileToOpen.id)) {
-            const projectFile: I_File = {
-                id: `project-${fileToOpen.id}`,
-                name: `${fileToOpen.id}.info`,
-                type: "project",
-                content: "",
-                position: { x: 0, y: 0 },
-            };
-            openWindow(projectFile);
+        if (fileToOpen.type === "directory" && Array.isArray(fileToOpen.content)) {
+            const projectFile = fileToOpen.content.find((f) => f.type === "project");
+            if (projectFile) {
+                openFile(projectFile.id);
+            }
         }
     };
 

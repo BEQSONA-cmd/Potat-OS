@@ -1,7 +1,7 @@
 import { DataTypes, Model, Transaction } from "sequelize";
 import sequelize from "../db";
 
-export type FileType = "file" | "directory";
+export type FileType = "file" | "directory" | "project";
 
 export type ContentType = string | File[];
 

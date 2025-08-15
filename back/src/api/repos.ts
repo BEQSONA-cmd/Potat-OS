@@ -100,14 +100,36 @@ async function fetchRepoContents(repoName: string, path: string = ""): Promise<I
     }
 }
 
+function repoInfo(repoName: string) {
+    return {
+        id: `${repoName}.info`,
+        name: `${repoName}.info`,
+        type: "project",
+        position: { x: 10, y: 10 },
+        content: "",
+    };
+}
+
 export async function getNewResponseData(repoName: string) {
+    if (repoName === "Tabley") {
+        return {
+            id: "Tabley",
+            name: "Tabley",
+            type: "directory",
+            position: { x: 10, y: 10 },
+            content: [repoInfo("Tabley")],
+        };
+    }
     const repoContents = await fetchRepoContents(repoName, "");
+
+    const fullContent = [repoInfo(repoName), ...repoContents];
+
     const responseData = {
         id: generateId(),
         name: repoName,
         type: "directory",
         position: { x: 10, y: 10 },
-        content: repoContents,
+        content: fullContent,
     };
 
     return responseData;

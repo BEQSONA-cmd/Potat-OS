@@ -1,7 +1,7 @@
 "use client";
 
 import { useFiles } from "@/components/contexts/FileContext";
-import { prompt, keyHook } from "@/components/Terminal/init";
+import { keyHook, veryFirstPrompt } from "@/components/Terminal/init";
 import { useEffect, useRef } from "react";
 import { Terminal } from "xterm";
 import { FitAddon } from "xterm-addon-fit";
@@ -35,7 +35,7 @@ export default function TerminalContent() {
             terminal.open(terminalRef.current!);
             fitAddon.fit();
 
-            prompt(terminal, true);
+            veryFirstPrompt(terminal);
             keyHook(terminal, () => filesRef.current ?? []);
         }
 

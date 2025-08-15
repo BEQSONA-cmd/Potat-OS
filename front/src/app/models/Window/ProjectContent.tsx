@@ -1,6 +1,5 @@
 import React from "react";
 import { projects } from "@/components/Project/projects";
-import { FaGithub } from "react-icons/fa";
 
 export default function ProjectContent({ fileName }: { fileName: string }) {
     const baseFileName = fileName.split(".")[0];
@@ -55,7 +54,7 @@ export default function ProjectContent({ fileName }: { fileName: string }) {
                                     <div key={lang.name}>
                                         <div className="flex justify-between text-sm mb-1">
                                             <span className="flex items-center gap-2">
-                                                <lang.icon className={lang.color ? `text-[${lang.color}]` : ""} />
+                                                {lang.icon && <lang.icon style={{ color: lang.color }} />}
                                                 {lang.name}
                                             </span>
                                             <span>{lang.precent}%</span>
@@ -83,7 +82,6 @@ export default function ProjectContent({ fileName }: { fileName: string }) {
                                         className="px-3 py-1 rounded-full text-sm flex items-center gap-2"
                                         style={{ backgroundColor: `${tech.color}20`, color: tech.color }}
                                     >
-                                        <tech.icon />
                                         {tech.name}
                                     </span>
                                 ))}
@@ -95,25 +93,15 @@ export default function ProjectContent({ fileName }: { fileName: string }) {
                     <div className="bg-gray-800 rounded-xl p-6">
                         <h2 className="text-xl font-mono mb-4 text-pink-400">LINKS</h2>
                         <div className="space-y-3">
-                            {currentProject.github && (
+                            {currentProject.link && (
                                 <a
-                                    href={currentProject.github}
+                                    href={currentProject.link.url}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors"
                                 >
-                                    <FaGithub className="text-xl" />
-                                    <span>View on GitHub</span>
-                                </a>
-                            )}
-                            {currentProject.exampleUrl && (
-                                <a
-                                    href={currentProject.exampleUrl}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors"
-                                >
-                                    <span>Live Demo/Example</span>
+                                    <currentProject.link.icon className="text-xl" />
+                                    <span>{currentProject.link.name}</span>
                                 </a>
                             )}
                         </div>
