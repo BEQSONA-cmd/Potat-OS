@@ -61,7 +61,7 @@ export default function Desktop() {
             <Navbar />
             <div
                 ref={desktopRef}
-                className="relative w-full h-full mt-8"
+                className="w-full h-full mt-8"
                 onMouseDown={handleMouseDown}
                 onMouseMove={handleMouseMove}
                 onMouseUp={handleMouseUp}
