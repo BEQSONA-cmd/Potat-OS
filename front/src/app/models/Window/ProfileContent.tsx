@@ -57,14 +57,14 @@ export default function ProfileContent() {
     const [activeTab, setActiveTab] = useState<"skills" | "education" | "contact">("skills");
 
     return (
-        <div className="h-full w-full bg-gradient-to-br from-gray-900 to-gray-950 text-white p-6 overflow-y-auto">
+        <div className="h-full w-full bg-gradient-to-br from-gray-900 to-gray-950 text-white p-6 overflow-y-auto scrollbar-hide">
             <div className="flex flex-col sm:flex-col md:flex-row items-start md:items-center justify-between mb-8 gap-4 sm:gap-6">
                 <div className="flex items-center gap-4 sm:gap-6">
                     <div className="relative">
                         <FaUser className="relative z-10 text-orange-400 w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 p-2 sm:p-3 md:p-4 bg-gray-800 rounded-full border-2 border-orange-500/30" />
                     </div>
                     <div>
-                        <h1 className="text-xl sm:text-2xl md:text-3xl font-bold bg-white bg-clip-text text-transparent">
+                        <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-white">
                             {user.name} {user.surname}
                         </h1>
                         <p className="text-gray-300 text-sm sm:text-base md:text-gray-300 mt-1">{user.bio}</p>

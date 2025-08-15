@@ -150,7 +150,7 @@ export default function Window({ fileWindow }: WindowProps) {
                 </div>
             </div>
 
-            <div className="flex-1 overflow-auto">
+            <div className="flex-1 overflow-auto ">
                 <WindowContent file={file} />
             </div>
 

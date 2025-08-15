@@ -29,7 +29,7 @@ const CodeBlock = ({ language, value }: { language: string | null; value: string
 
 function ContentCard({ content, style, language }: { content: string; style: string; language?: string }) {
     return (
-        <div className="h-full w-full overflow-auto">
+        <div className="h-full w-full overflow-auto scrollbar-hide">
             {style === "basic" ? (
                 <pre className="text-white whitespace-pre-wrap p-4">{content}</pre>
             ) : style === "readme" ? (
@@ -99,7 +99,7 @@ export function FileContent({ file }: { file: I_File }) {
             {isEditing ? (
                 <textarea
                     ref={textareaRef}
-                    className="w-full h-full bg-gray-900 text-white p-4 rounded focus:outline-none font-mono"
+                    className="w-full h-full bg-gray-900 text-white p-4 rounded focus:outline-none font-mono scrollbar-hide"
                     value={content}
                     onChange={(e) => setContent(e.target.value)}
                     onKeyDown={(e) => {

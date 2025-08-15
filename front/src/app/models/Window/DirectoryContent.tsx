@@ -15,7 +15,7 @@ function FileInDirectory({ file }: { file: I_File }) {
                 onDoubleClick={(e) => onDoubleClick(e, file)}
                 className="text-xs font-medium text-white group flex flex-col items-center w-full cursor-pointer p-2 hover:bg-gray-700 rounded transition-colors"
             >
-            <Icon size={40} className="text-white transition-colors" style={{ color }} />
+                <Icon size={40} className="text-white transition-colors" style={{ color }} />
                 {editFileId === file.id ? (
                     <NameInput file={file} />
                 ) : (
@@ -30,16 +30,17 @@ export function DirectoryContent({ file }: { file: I_File }) {
     const { getDirFiles } = useFiles();
 
     const files = getDirFiles(file);
-    return <div>{files && 
+    return (
+        <div>
+            {files && (
                 <div className="h-full w-full p-4">
                     <div className="grid grid-cols-auto-fill gap-2">
                         {files.map((file) => (
-                            <FileInDirectory
-                                key={file.id}
-                                file={file}
-                            />
+                            <FileInDirectory key={file.id} file={file} />
                         ))}
                     </div>
                 </div>
-        }</div>;
+            )}
+        </div>
+    );
 }

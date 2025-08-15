@@ -53,7 +53,7 @@ export default function TerminalContent() {
     }, []);
 
     return (
-        <div className="p-4 h-full w-full bg-gray-900 text-white">
+        <div className="p-4 h-full w-full bg-gray-900 text-white ">
             <div ref={terminalRef} className="w-full h-full" />
         </div>
     );

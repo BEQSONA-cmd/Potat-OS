@@ -10,7 +10,7 @@ export default function ProjectContent({ fileName }: { fileName: string }) {
     }
 
     return (
-        <div className="h-full w-full bg-gray-900 text-white p-6 overflow-y-auto">
+        <div className="h-full w-full bg-gray-900 text-white p-6 overflow-y-auto scrollbar-hide">
             {/* Terminal-inspired header */}
             <div className="mb-6">
                 <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600">
