@@ -6,6 +6,7 @@ import ProfileContent from "./ProfileContent";
 import FirefoxContent from "./FirefoxContent";
 import { DirectoryContent } from "./DirectoryContent";
 import ProjectContent from "./ProjectContent";
+import TrashContent from "./TrashContent";
 
 export default function WindowContent({ file }: { file: I_File }) {
     switch (file.type) {
@@ -21,6 +22,8 @@ export default function WindowContent({ file }: { file: I_File }) {
             return <ProjectContent fileName={file.name} />;
         case "firefox":
             return <FirefoxContent />;
+        case "trash":
+            return <TrashContent />;
         default:
             return <DirectoryContent file={file} />;
     }

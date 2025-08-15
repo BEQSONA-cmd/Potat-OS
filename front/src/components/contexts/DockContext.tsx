@@ -29,19 +29,19 @@ export const DockAppsProvider = ({ children }: { children: ReactNode }) => {
     const [dockApps, setDockApps] = useState<I_DockApp[]>([
         {
             isDefault: true,
-            id: "firefoxId",
-            name: "Firefox",
+            id: "terminalId",
+            name: "Terminal",
             icon: {
-                icon: FaFirefoxBrowser,
+                icon: ImTerminal,
                 color: "#FF6600",
             },
         },
         {
             isDefault: true,
-            id: "terminalId",
-            name: "Terminal",
+            id: "firefoxId",
+            name: "Firefox",
             icon: {
-                icon: ImTerminal,
+                icon: FaFirefoxBrowser,
                 color: "#FF6600",
             },
         },

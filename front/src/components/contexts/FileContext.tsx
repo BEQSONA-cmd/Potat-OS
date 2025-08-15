@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 
 const HOST = process.env.NEXT_PUBLIC_HOST || "http://localhost:8080";
 
-export type FileType = "file" | "directory" | "settings" | "terminal" | "firefox" | "profile" | "project";
+export type FileType = "file" | "directory" | "settings" | "terminal" | "firefox" | "profile" | "project" | "trash";
 
 export type ContentType = string | I_File[];
 
@@ -88,6 +88,20 @@ const defaultFiles: I_File[] = [
         position: { x: 10, y: 220 },
         content: "",
     },
+    {
+        id: "projectsId",
+        name: "Projects",
+        type: "directory",
+        position: { x: 10, y: 320 },
+        content: [],
+    },
+    {
+        id: "trashId",
+        name: "Trash",
+        type: "trash",
+        position: { x: 10, y: 420 },
+        content: [],
+    },
 ];
 
 export const FilesProvider = ({ children }: { children: ReactNode }) => {
@@ -107,22 +121,35 @@ export const FilesProvider = ({ children }: { children: ReactNode }) => {
 
     useEffect(() => {
         (async () => {
-            const ProjectsFile: I_File = {
-                id: "projectsId",
-                name: "Projects",
-                type: "directory",
-                position: { x: 10, y: 320 },
-                content: [],
-            };
             for (const name of repoNames) {
                 const file = await getRepo({ repoName: name });
-                if (file && Array.isArray(ProjectsFile.content)) {
-                    ProjectsFile.content.push({ ...file, id: name });
+                const projectsDir = defaultFiles.find((f) => f.id === "projectsId" && f.type === "directory");
+                if (file && projectsDir && Array.isArray(projectsDir.content)) {
+                    projectsDir.content.push({ ...file, id: name });
                 }
             }
-
-            addFile(ProjectsFile);
         })();
+    }, []);
+
+    useEffect(() => {
+        function getTrashPosition(): I_Point {
+            const marginX = 50;
+            const marginY = 150;
+            const iconWidth = 64;
+            const iconHeight = 64;
+            return {
+                x: window.innerWidth - iconWidth - marginX,
+                y: window.innerHeight - iconHeight - marginY,
+            };
+        }
+
+        function updateTrashPosition() {
+            setFiles((prev) =>
+                prev ? prev.map((f) => (f.id === "trashId" ? { ...f, position: getTrashPosition() } : f)) : null
+            );
+        }
+
+        updateTrashPosition();
     }, []);
 
     function findFile(id: string, searchFiles?: I_File[]): I_File | undefined {
@@ -170,7 +197,7 @@ export const FilesProvider = ({ children }: { children: ReactNode }) => {
     };
 
     const deleteFile = (id: string) => {
-        if (id === "firefoxId" || id === "profileId" || id === "terminalId" || id === "projectsId") {
+        if (defaultFiles.some((f) => f.id === id)) {
             toast.error("You can't delete this file");
             return;
         }

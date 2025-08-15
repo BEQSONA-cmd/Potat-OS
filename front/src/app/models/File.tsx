@@ -1,6 +1,5 @@
 "use client";
 
-import { FaFile, FaFolder } from "react-icons/fa";
 import { useEffect, useRef, useState } from "react";
 import { useContextMenu } from "../../components/contexts/ContextMenuContext";
 import { I_File, useFiles } from "../../components/contexts/FileContext";
@@ -60,9 +59,11 @@ function File({ file, opened }: { file: I_File; opened: boolean }) {
             if (closeDirectoryId && closeDirectoryId !== file.id) {
                 setHoveredDirectoryId("");
                 const directry = findFile(closeDirectoryId) as I_File;
-                const files = getDirFiles(directry);
-                files.push(file);
-                updateFileContent(closeDirectoryId, files);
+                if (directry.type === "directory") {
+                    const files = getDirFiles(directry);
+                    files.push(file);
+                    updateFileContent(closeDirectoryId, files);
+                }
                 deleteFile(file.id);
             }
         }
@@ -92,7 +93,7 @@ function File({ file, opened }: { file: I_File; opened: boolean }) {
                 openContextMenu(e, file.id);
             }}
         >
-            {file.type === "directory" ? (
+            {file.type === "directory" || file.type === "trash" ? (
                 file.id === hoveredDirectoryId ? (
                     <Icon size={40} className="text-white animate-pulse" style={{ color }} />
                 ) : (

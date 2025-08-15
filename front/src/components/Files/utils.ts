@@ -23,6 +23,7 @@ import { IconType } from "react-icons";
 import { I_File } from "../contexts/FileContext";
 import { GrDocumentConfig } from "react-icons/gr";
 import { LuFileJson } from "react-icons/lu";
+import { IoTrashBin } from "react-icons/io5";
 
 export function getCloseDirectory(position: I_Point, files: I_File[]): string {
     if (!files) return "";
@@ -30,7 +31,7 @@ export function getCloseDirectory(position: I_Point, files: I_File[]): string {
     let closestDistance = Infinity;
 
     files.forEach((file) => {
-        if (file.type === "directory") {
+        if (file.type === "directory" || file.type === "trash") {
             const distance = Math.sqrt(
                 Math.pow(position.x - file.position.x, 2) + Math.pow(position.y - file.position.y, 2)
             );
@@ -174,6 +175,8 @@ export function getFileIcon(file: I_File): FileIcon {
             return { icon: FaFirefoxBrowser, color: "#FF6600" };
         case "profile":
             return { icon: FaUser, color: "#1E90FF" };
+        case "trash":
+            return { icon: IoTrashBin, color: "#61dafb" };
         case "project":
             return { icon: FaInfoCircle, color: "#1E90FF" };
         default:
