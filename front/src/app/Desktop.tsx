@@ -50,7 +50,7 @@ export default function Desktop() {
 
     return (
         <div
-            className="w-screen h-screen relative text-white select-none overflow-hidden"
+            className="w-screen h-screen relative text-white select-none overflow-hidden pt-8"
             onContextMenu={openContextMenu}
             onClick={() => setContextMenu(null)}
         >
@@ -61,7 +61,7 @@ export default function Desktop() {
             <Navbar />
             <div
                 ref={desktopRef}
-                className="w-full h-full mt-8"
+                className="relative w-full h-full"
                 onMouseDown={handleMouseDown}
                 onMouseMove={handleMouseMove}
                 onMouseUp={handleMouseUp}
