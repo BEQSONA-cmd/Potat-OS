@@ -50,7 +50,7 @@ export default function Desktop() {
 
     return (
         <div
-            className="w-screen h-screen relative overflow-hidden text-white select-none overflow-x-hidden"
+            className="w-screen h-screen relative text-white select-none overflow-hidden"
             onContextMenu={openContextMenu}
             onClick={() => setContextMenu(null)}
         >

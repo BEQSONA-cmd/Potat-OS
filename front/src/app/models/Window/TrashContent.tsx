@@ -11,7 +11,7 @@ import { SiJavascript } from "react-icons/si";
 import { GiLeak } from "react-icons/gi";
 
 const randomTrashes: RandomTrash[] = [
-    { text: "PHP - Where spaghetti is a design pattern", icon: FaPhp },
+    { text: "PHP", icon: FaPhp },
     { text: "Memory Management in C", icon: GiLeak },
     { text: "Python speed - Powered by molasses", icon: FaPython },
     { text: "Java - Write once, debug everywhere", icon: FaJava },
