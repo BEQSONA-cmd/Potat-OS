@@ -14,12 +14,6 @@ const contactSocials = [
         color: "#0077B5",
     },
     {
-        name: "Portfolio",
-        url: "https://beqa.live",
-        icon: FaGlobe,
-        color: "#22c55e",
-    },
-    {
         name: "Email",
         url: "mailto:tvildiani2001@gmail.com",
         icon: FaEnvelope,
